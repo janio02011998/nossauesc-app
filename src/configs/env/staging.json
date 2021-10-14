@@ -1,0 +1,9 @@
+{
+"ENV": "development",
+"APIKEY": "AIzaSyAeDo4xqwJ7sDc6bdCSo9q1BfRboAIoAmc",
+"AUTHDOMAIN": "nossa-uesc.firebaseapp.com",
+"PROJECTID": "nossa-uesc",
+"STORAGEBUCKET": "nossa-uesc.appspot.com",
+"MESSAGINGSENDERID": "414663250095",
+"APPID": "1:414663250095:web:0eac884c44abac5804445a"
+}
