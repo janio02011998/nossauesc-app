@@ -1,21 +1,22 @@
 import React, { ReactNode } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text } from "react-native";
-import { theme } from "../../global/styles/theme";
-import { BorderlessButton } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
+import { View, Text } from "react-native";
+
+import { BorderlessButton } from "react-native-gesture-handler";
+import { useAuth } from "hooks/auth";
+
+import { theme } from "../../global/styles/theme";
+import { styles } from "./style";
 
 type Props = {
   title: string;
   action?: ReactNode;
 };
 
-import { styles } from "./style";
-import { useNavigation } from "@react-navigation/core";
-
 export function Header({ title, action }: Props) {
   const { secondary100, secondary40, heading } = theme.colors;
-
   const { goBack } = useNavigation();
 
   function handleGoBack() {

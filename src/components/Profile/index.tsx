@@ -1,29 +1,40 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { Avatar } from '../Avatar';
+import React from "react";
+import { Text, View } from "react-native";
 
-import { styles } from './styles';
+import { useAuth } from "hooks/auth";
+import { Avatar } from "../Avatar";
 
-type Props = {
+import { styles } from "./styles";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/core";
+import { PHRASES } from "constants/phrases";
 
-}
+type Props = {};
 
-export function Profile({ }: Props) {
-    return (
-        <View style={styles.container}>
+export function Profile({}: Props) {
+  const { user } = useAuth();
+  const { navigate } = useNavigation();
 
-            <Avatar urlImage="https://github.com/janio02011998.png" />
-            <View>
-                <View style={styles.user}>
-                    <Text style={styles.greeting}>
-                        Olá,
-                    </Text>
-                    <Text style={styles.username}>
-                        Jânio,
-                    </Text>
-                </View>
-                <Text style={styles.message}>Hoje é dia de vitória</Text>
-            </View>
+  const day = new Date().getDay();
+
+  const goAccountsInfo = () => {
+    if (user.uid !== "access-basic") {
+      navigate("AccountsInfo");
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={goAccountsInfo}>
+        <Avatar urlImage={user.photoURL} />
+      </TouchableWithoutFeedback>
+      <View>
+        <View style={styles.user}>
+          <Text style={styles.greeting}>Olá,</Text>
+          <Text style={styles.username}>{user.displayName.split(" ")[0]}</Text>
         </View>
-    )
+        <Text style={styles.message}>{PHRASES[day]}</Text>
+      </View>
+    </View>
+  );
 }

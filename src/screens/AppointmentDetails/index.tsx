@@ -1,5 +1,11 @@
 import React from "react";
-import { FlatList, ImageBackground, Text, View } from "react-native";
+import {
+  FlatList,
+  ImageBackground,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { BorderlessButton } from "react-native-gesture-handler";
 
@@ -9,13 +15,28 @@ import { ListHeader } from "components/ListHeader";
 import { Background } from "components/Background";
 import { ListDivider } from "components/ListDivider";
 
-import BannerImg from "assets/banner.png";
-
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
 import { ButtonIcon } from "components/ButtonIcon";
+import { HoursMinutes } from "components/HoursMinutes";
 
-export function AppointmentDetails() {
+type Props = {
+  route: {
+    params: {
+      category: string;
+    };
+  };
+};
+
+type Schedule = {
+  id: string;
+  startAt: string;
+  finishAt: string;
+};
+
+export function AppointmentDetails({ route }: any) {
+  const { item } = route.params;
+
   const members = [
     {
       id: "1",
@@ -30,6 +51,36 @@ export function AppointmentDetails() {
       status: "offline",
     },
   ];
+
+  const schedule = [
+    {
+      id: "SEGUNDA",
+      startAt: "15:00",
+      finishAt: "19:00",
+    },
+    {
+      id: "QUARTA",
+      startAt: "15:00",
+      finishAt: "19:00",
+    },
+    {
+      id: "SEXTA",
+      startAt: "15:00",
+      finishAt: "19:00",
+    },
+  ];
+
+  function renderStartAndFinishTime(item: Schedule) {
+    return (
+      <View style={styles.wrapperTime}>
+        <Text style={styles.legend}>{item.id}</Text>
+        <Text style={styles.legend}>
+          {item.startAt} ~ {item.finishAt}
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <Background>
       <Header
@@ -40,24 +91,39 @@ export function AppointmentDetails() {
           </BorderlessButton>
         }
       />
-      <ImageBackground source={BannerImg} style={styles.banner}>
+      <ImageBackground source={{ uri: item.guild.icon }} style={styles.banner}>
         <View style={styles.bannerContent}>
-          <Text style={styles.title}>Lendários</Text>
-          <Text style={styles.subtitle}>
-            É hoje que vamos chegar ao challenger sem perder uma partida da md10
-          </Text>
+          <Text style={styles.title}>{item.guild.name}</Text>
+          <Text style={styles.subtitle}>{item.description}</Text>
         </View>
       </ImageBackground>
-      <ListHeader title="Jogadores" subtitle="3" />
-      <FlatList
-        data={members}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Member data={item} />}
-        ItemSeparatorComponent={() => <ListDivider />}
-        style={styles.members}
-      />
+      <ScrollView style={styles.containerScroll}>
+        <View style={styles.wrapperDescription}>
+          <Text style={styles.legend}>Descrição</Text>
+          <Text style={styles.legend}>
+            A expressão Lorem ipsum em design gráfico e editoração é um texto
+            padrão em latim utilizado na produção gráfica para preencher os
+            espaços de texto em publicações para testar e ajustar aspectos
+            visuais antes de utilizar conteúdo real.
+          </Text>
+        </View>
+        <View style={styles.wrapper}>
+          <Text style={styles.legendTitle}>Horário</Text>
+          {schedule.map((item) => (
+            <View key={item.id}>{renderStartAndFinishTime(item)}</View>
+          ))}
+        </View>
+        <ListHeader title="Membros" subtitle="3" />
+        <FlatList
+          data={members}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Member data={item} />}
+          ItemSeparatorComponent={() => <ListDivider />}
+          style={styles.members}
+        />
+      </ScrollView>
       <View style={styles.footer}>
-        <ButtonIcon title="Entrar na partida" />
+        <ButtonIcon title="Entrar na grupo" />
       </View>
     </Background>
   );

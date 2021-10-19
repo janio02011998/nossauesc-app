@@ -2,19 +2,28 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 import * as Google from "expo-auth-session/providers/google";
 import { Auth } from "configs/firebase";
 import firebase from "firebase/app";
+import { getUser } from "services/getUser";
+import { createUser } from "services/createUser";
 
-type User = {
+export type User = {
   displayName: string;
   email: string;
   phoneNumber: string;
   photoURL: string;
   providerId: string;
   uid: string;
+  role: string;
+  course: string;
+  registration: string;
+  departament: string;
+  searchArea: string;
+  authorization: string;
 };
 
 type AuthContextData = {
   user: User;
   loading: boolean;
+  setAllInfosUser: (user: User) => void;
   signIn: () => Promise<void>;
 };
 
@@ -36,11 +45,15 @@ function AuthProvider({ children }: AuthProviderProps) {
   async function signIn() {
     try {
       setLoading(true);
-      promptAsync();
+      await promptAsync();
     } catch {
       throw new Error("Não foi possível autenticar!");
     }
   }
+
+  const setAllInfosUser = (user: User) => {
+    setUser(user);
+  };
 
   React.useEffect(() => {
     try {
@@ -53,7 +66,27 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         Auth.onAuthStateChanged((userResult: any) => {
           if (userResult) {
-            setUser(userResult.providerData[0]);
+            const displayName = userResult.providerData[0].displayName;
+            const email = userResult.providerData[0].email;
+            const phoneNumber = userResult.providerData[0].phoneNumber;
+            const photoURL = userResult.providerData[0].photoURL;
+            const providerId = userResult.providerData[0].providerId;
+            const uid = userResult.providerData[0].uid;
+
+            setUser({
+              displayName,
+              email,
+              phoneNumber,
+              photoURL,
+              providerId,
+              uid,
+              course: "",
+              role: "",
+              registration: "",
+              departament: "",
+              searchArea: "",
+              authorization: "",
+            });
           }
         });
 
@@ -71,6 +104,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       value={{
         user,
         signIn,
+        setAllInfosUser,
         loading,
       }}
     >

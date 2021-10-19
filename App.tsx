@@ -12,9 +12,7 @@ import { Background } from "./src/components/Background";
 import { Routes } from "./src/routes";
 import { AuthProvider } from "./src/hooks/auth";
 
-LogBox.ignoreLogs([
-  "You are not currently signed in to Expo on your development machine.",
-]);
+LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,7 +25,6 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  console.log(process.env);
   return (
     <Background>
       <StatusBar

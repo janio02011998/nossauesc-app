@@ -1,6 +1,6 @@
 export const theme = {
   colors: {
-    primary: "#E51C44",
+    primary: "#c4815b",
 
     secondary100: "#2a4858",
     secondary90: "#1c6373",

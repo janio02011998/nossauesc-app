@@ -1,57 +1,36 @@
 import * as React from "react";
 import * as WebBrowser from "expo-web-browser";
-// import * as Google from "expo-auth-session/providers/google";
-import { Text, View, Image, Alert, ActivityIndicator } from "react-native";
+import { RectButton } from "react-native-gesture-handler";
+import { Text, View, Image, ActivityIndicator } from "react-native";
 
-// import firebase from "firebase/app";
-// import "firebase/auth";
-
-import IllustrationImg from "assets/illustration.png";
-import { ButtonIcon } from "components/ButtonIcon";
 import { Background } from "components/Background";
+import { useAuth } from "hooks/auth";
 
-import { theme } from "global/styles/theme";
+import GoogleIcon from "assets/icons/google.png";
+import IllustrationImg from "assets/illustration.png";
 
 import { styles } from "./style";
-import { useAuth } from "hooks/auth";
+import { theme } from "global/styles/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export function SignIn() {
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, setAllInfosUser } = useAuth();
 
-  // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-  //   clientId:
-  //     "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
-  // });
-
-  // React.useEffect(() => {
-  //   try {
-  //     if (response?.type === "success") {
-  //       const { id_token } = response.params;
-
-  //       const auth = firebase.auth();
-  //       const provider: any = new firebase.auth.GoogleAuthProvider();
-  //       const credential = provider.credential(id_token);
-  //       auth.signInWithCredential(credential);
-
-  //       firebase.auth().onAuthStateChanged((user) => {
-  //         if (user) {
-  //           // User logged in already or has just logged in.
-  //           console.log(user);
-  //         } else {
-  //           // User not logged in or has just logged out.
-  //         }
-  //       });
-
-  //       setLoading(false);
-  //     } else {
-  //       setLoading(false);
-  //     }
-  //   } catch (err) {
-  //     setLoading(false);
-  //   }
-  // }, [response]);
+  const signInWithouLogin = () => {
+    setAllInfosUser({
+      displayName: "Usuário",
+      email: "usernossauesc@gmail.com",
+      phoneNumber: "access-basic",
+      photoURL:
+        "https://lh3.googleusercontent.com/proxy/Zt8br8RsdsWV528JEFaN8CJeAuuL2X385rqFw7M0b_y59H8PZgsBboTBXOF6UwBPmFGZrtPsxlJ70nxtQE8ZZPMUL0OJ5JCxmdWiCrR3SK0uG6ozxYi3JFbX2vWP36c",
+      providerId: "access-basic",
+      uid: "access-basic",
+      course: "access-basic",
+      role: "access-basic",
+      registration: "access-basic",
+    });
+  };
 
   return (
     <Background>
@@ -73,7 +52,22 @@ export function SignIn() {
           </Text>
 
           {!loading ? (
-            <ButtonIcon title="Entrar com Google" onPress={signIn} />
+            <View style={styles.wrapper}>
+              <RectButton
+                style={styles.buttonWithoutLogin}
+                onPress={signInWithouLogin}
+              >
+                <View style={styles.buttonTextContainer}>
+                  <Text style={styles.buttonTextWithLogin}>Entrar</Text>
+                </View>
+              </RectButton>
+              <RectButton style={styles.buttonContainer} onPress={signIn}>
+                <Image source={GoogleIcon} style={styles.googleIcon} />
+                <View style={styles.buttonTextContainer}>
+                  <Text style={styles.buttonText}>Contiue com Google</Text>
+                </View>
+              </RectButton>
+            </View>
           ) : (
             <ActivityIndicator size="large" color={theme.colors.primary} />
           )}

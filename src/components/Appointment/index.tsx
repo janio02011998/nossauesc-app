@@ -1,13 +1,13 @@
 import React from "react";
 import { RectButton, RectButtonProps } from "react-native-gesture-handler";
-import { Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 import { GuildProps } from "components/Guild";
 import { GuildIcon } from "../GuildIcon";
 import { categories } from "Utils/categories";
 
 import PlayerSvg from "../../assets/player.svg";
-import CalendarSvg from "../../assets/calendar.svg";
+import CalendarPng from "../../assets/icons/schedule.png";
 
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
@@ -45,7 +45,10 @@ export function Appointment({ data, ...rest }: Props) {
           </View>
           <View style={styles.footer}>
             <View style={styles.dateInfo}>
-              <CalendarSvg />
+              <Image
+                source={CalendarPng}
+                style={{ resizeMode: "cover", width: 18, height: 18 }}
+              />
               <Text style={styles.date}>{data.date}</Text>
             </View>
             <View style={styles.playersInfo}>

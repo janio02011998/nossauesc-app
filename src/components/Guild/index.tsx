@@ -15,7 +15,7 @@ import { theme } from "global/styles/theme";
 export type GuildProps = {
   id: string;
   name: string;
-  icon: string | null;
+  icon: any;
   owner: boolean;
 };
 
@@ -26,7 +26,7 @@ type Props = TouchableOpacityProps & {
 export function Guild({ data, ...rest }: Props) {
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.7} {...rest}>
-      <GuildIcon />
+      <GuildIcon icon={data.icon} />
 
       <View style={styles.content}>
         <View>

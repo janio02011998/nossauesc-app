@@ -62,4 +62,29 @@ export const styles = StyleSheet.create({
     marginVertical: 60,
     marginBottom: 20,
   },
+  week: {
+    marginTop: 18,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  textDay: {
+    fontSize: 18,
+    color: theme.colors.heading,
+    fontFamily: theme.fonts.title500,
+  },
+  title: {
+    marginTop: 16,
+    fontSize: 18,
+    fontFamily: theme.fonts.title700,
+    color: theme.colors.heading,
+  },
+  bannerWrapper: {
+    height: 125,
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#111",
+    borderRadius: 8,
+    resizeMode: "stretch",
+  },
 });

@@ -12,15 +12,29 @@ export const styles = StyleSheet.create({
   banner: {
     width: "100%",
     height: 234,
+    justifyContent: "flex-end",
   },
   bannerContent: {
-    flex: 1,
-    justifyContent: "flex-end",
+    width: "100%",
+    alignSelf: "flex-end",
     paddingHorizontal: 24,
     marginBottom: 30,
+    backgroundColor: theme.colors.overlay,
   },
   title: {
     fontSize: 28,
+    fontFamily: theme.fonts.title700,
+    color: theme.colors.heading,
+  },
+  legend: {
+    marginTop: 16,
+    fontSize: 18,
+    fontFamily: theme.fonts.title700,
+    color: theme.colors.heading,
+    textAlign: "justify",
+  },
+  legendTitle: {
+    fontSize: 24,
     fontFamily: theme.fonts.title700,
     color: theme.colors.heading,
   },
@@ -28,15 +42,29 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: theme.fonts.text400,
     color: theme.colors.heading,
-    lineHeight: 21
+    lineHeight: 21,
   },
   members: {
     marginLeft: 24,
     marginTop: 27,
   },
+  wrapper: {
+    paddingHorizontal: 24,
+    marginTop: 32,
+  },
+  wrapperDescription: {
+    paddingHorizontal: 24,
+  },
+  wrapperTime: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   footer: {
     paddingHorizontal: 24,
     paddingVertical: 20,
     margin: getBottomSpace(),
+  },
+  containerScroll: {
+    marginBottom: 40,
   },
 });

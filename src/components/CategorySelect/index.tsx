@@ -9,9 +9,11 @@ type Props = {
   categorySelected: string;
   setCategory: (categoryId: string) => void;
   hasCheckBox?: boolean;
+  faqDisable?: boolean;
 };
 
 export function CategorySelect({
+  faqDisable,
   categorySelected,
   hasCheckBox = false,
   setCategory,
@@ -23,16 +25,21 @@ export function CategorySelect({
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ paddingRight: 40 }}
     >
-      {categories.map((category) => (
-        <Category
-          key={category.id}
-          title={category.title}
-          icon={category.icon}
-          checked={category.id === categorySelected}
-          onPress={() => setCategory(category.id)}
-          hasCheckBox={hasCheckBox}
-        />
-      ))}
+      {categories.map((category) => {
+        if (faqDisable && category.id === "6") {
+          return;
+        }
+        return (
+          <Category
+            key={category.id}
+            title={category.title}
+            icon={category.icon}
+            checked={category.id === categorySelected}
+            onPress={() => setCategory(category.id)}
+            hasCheckBox={hasCheckBox}
+          />
+        );
+      })}
     </ScrollView>
   );
 }
