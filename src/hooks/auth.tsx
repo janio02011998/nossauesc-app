@@ -2,8 +2,6 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 import * as Google from "expo-auth-session/providers/google";
 import { Auth } from "configs/firebase";
 import firebase from "firebase/app";
-import { getUser } from "services/getUser";
-import { createUser } from "services/createUser";
 
 export type User = {
   displayName: string;

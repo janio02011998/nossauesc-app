@@ -4,7 +4,7 @@ import { Image, Text, View } from "react-native";
 
 import { GuildProps } from "components/Guild";
 import { GuildIcon } from "../GuildIcon";
-import { categories } from "Utils/categories";
+import { categories } from "constants/categories";
 
 import PlayerSvg from "../../assets/player.svg";
 import CalendarPng from "../../assets/icons/schedule.png";

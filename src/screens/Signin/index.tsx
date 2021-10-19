@@ -29,6 +29,9 @@ export function SignIn() {
       course: "access-basic",
       role: "access-basic",
       registration: "access-basic",
+      departament: "access-basic",
+      searchArea: "access-basic",
+      authorization: "access-basic",
     });
   };
 

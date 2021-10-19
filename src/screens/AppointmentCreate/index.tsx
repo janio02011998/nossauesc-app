@@ -13,8 +13,8 @@ import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { RectButton } from "react-native-gesture-handler";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/core";
 
-import { Firestore } from "configs/firebase";
 import { Guilds } from "screens/Guilds";
 import { useAuth } from "hooks/auth";
 
@@ -32,12 +32,15 @@ import { SingleEvent } from "components/SingleEvent";
 import { InputText } from "components/InputText";
 import { CAM } from "components/Camera";
 
+import { formartSchedule } from "Utils/formartSchedule";
+import { formartScheduleWeek } from "Utils/formatScheduleWeek";
 import { createAcademicResearch } from "services/createAcademicResearch";
-import { daysOfWeek } from "Utils/daysOfWeek";
+import { daysOfWeek } from "constants/daysOfWeek";
 
 import { theme } from "global/styles/theme";
 import { styles } from "./styles";
-import { useNavigation } from "@react-navigation/core";
+import { createActivityStudent } from "services/createActivityStudenty";
+import { createSolidarity } from "services/createSolidarity";
 
 interface IFormData {
   banner: string;
@@ -79,81 +82,39 @@ export function AppointmentCreate() {
       return;
     }
 
-    const formartDataTimerWeek = Object.keys(dataTimerWeek).map(
-      (i: string, value: any) => {
-        const startAt =
-          dataTimerWeek[i].startAtH.padStart(2, "0") +
-          ":" +
-          dataTimerWeek[i].startAtM.padStart(2, "0");
-        const finishAt =
-          dataTimerWeek[i].finishAtH.padStart(2, "0") +
-          ":" +
-          dataTimerWeek[i].finishAtM.padStart(2, "0");
+    if (category === "1") {
+      createAcademicResearch(
+        "academic_research",
+        { ...data, course: course.name },
+        user
+      );
+    }
 
-        return {
-          day: i,
-          startAt,
-          finishAt,
-        };
-      }
-    );
+    if (categoriesWithFieldsRequired.includes(category)) {
+      const schedule = formartSchedule(dataTimer);
+      const weekSchedule = formartScheduleWeek(dataTimerWeek);
 
-    // [
-    //   {
-    //     day: "Sun",
-    //     date: "asdasd"
-    //     time: "asdasd"
-    //   }
-    // ]
+      createActivityStudent(
+        "actitivity_student",
+        {
+          course: course.name,
+          banner: bannerURI,
+          schedule: isSchedule ? null : schedule,
+          weekSchedule: isSchedule ? weekSchedule : null,
+          categoryId: category,
+          members: [],
+          isAcitivity: true,
+          ...data,
+        },
+        user
+      );
+    }
 
-    // const collections: any = {
-    //   1: "academic_research",
-    //   2: "actitivity_student",
-    //   3: "actitivity_student",
-    // };
-
-    // if (category === "1") {
-    //   const formData = {
-    //     course: course.name,
-    //     ...data,
-    //   };
-    //   Object.entries(formData).forEach((item) => {
-    //     const [key, value] = item;
-    //     if (value === "") delete formData[key];
-    //   });
-    //   createAcademicResearch("academic_research", formData, user);
-    // }
-
-    // if (categoriesWithFieldsRequired.includes(category)) {
-    //   const d =
-    //     dataTimer.date.padStart(2, "0") +
-    //     "/" +
-    //     dataTimer.mounth.padStart(2, "0");
-
-    //   const t =
-    //     dataTimer.hours.padStart(2, "0") +
-    //     ":" +
-    //     dataTimer.minute.padStart(2, "0");
-
-    //   const schedule = isSchedule
-    //     ? []
-    //     : [{ day: "singleEvent", date: d, time: t }];
-
-    //   const formData = {
-    //     course: course.name,
-    //     schedule,
-    //     ...data,
-    //   };
-
-    //   Object.entries(formData).forEach((item) => {
-    //     const [key, value] = item;
-    //     if (!value) delete formData[key];
-    //   });
-
-    //   console.log(formData);
-    // }
-    // clearFields();
-    // goBack();
+    if (category === "5") {
+      createSolidarity("solidarity", { ...data, banner: bannerURI }, user);
+    }
+    clearFields();
+    goBack();
   };
 
   const clearFields = () => {
@@ -188,9 +149,8 @@ export function AppointmentCreate() {
       alert("Permission to access camera roll is required!");
       return;
     }
-
     let pickerResult: any = await ImagePicker.launchImageLibraryAsync();
-    setBannerURI(pickerResult.uri);
+    console.log(pickerResult);
     return pickerResult.uri;
   };
 
@@ -221,7 +181,7 @@ export function AppointmentCreate() {
     });
   };
   const handleDataTimerWeek = (value: any, day: string) => {
-    setDataTimerWeek((prevState) => {
+    setDataTimerWeek((prevState: any) => {
       const daySelect = {
         [day]: {
           ...prevState[day],
@@ -325,6 +285,7 @@ export function AppointmentCreate() {
                           <CAM
                             onPress={async () => {
                               const uri = await openImagePickerAsync();
+                              setBannerURI(uri);
                               onChange(uri);
                             }}
                           />

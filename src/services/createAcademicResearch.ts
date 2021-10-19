@@ -7,6 +7,11 @@ export const createAcademicResearch = async (
   user: User
 ) => {
   try {
+    Object.entries(data).forEach((item) => {
+      const [key, value] = item;
+      if (value === "") delete data[key];
+    });
+
     Firestore.collection(collection).add({
       providerId: user.uid,
       teacher: user.displayName,
@@ -14,6 +19,8 @@ export const createAcademicResearch = async (
       photo: user.photoURL,
       searchArea: user.searchArea,
       email: user.email,
+      isAcitivity: true,
+      members: [],
       ...data,
     });
 

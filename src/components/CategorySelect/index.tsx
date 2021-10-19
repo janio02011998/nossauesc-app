@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView } from "react-native";
-import { categories } from "../../Utils/categories";
+import { categories } from "constants/categories";
 import { Category } from "../Category";
 
 import { styles } from "./styles";
