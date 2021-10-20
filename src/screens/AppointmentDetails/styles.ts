@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     textAlign: "justify",
   },
   legendTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: theme.fonts.title700,
     color: theme.colors.heading,
   },
@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
   },
   wrapper: {
     paddingHorizontal: 24,
-    marginTop: 32,
+    marginTop: 24,
   },
   wrapperDescription: {
     paddingHorizontal: 24,
@@ -63,6 +63,15 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 20,
     margin: getBottomSpace(),
+  },
+  containerAct: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  horizontalAct: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
   },
   containerScroll: {
     marginBottom: 40,

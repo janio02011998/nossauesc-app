@@ -14,19 +14,17 @@ import { theme } from "global/styles/theme";
 import { LinearGradient } from "expo-linear-gradient";
 
 type AppointmentProps = {
-  id: string;
-  guild: GuildProps;
-  category: string;
-  date: string;
-  description: string;
+  title: string;
+  subtitle: string;
+  icon?: string;
 };
 
 type Props = RectButtonProps & {
   data: AppointmentProps;
 };
 export function Appointment({ data, ...rest }: Props) {
-  const [category] = categories.filter((item) => item.id === data.category);
-  const { owner } = data.guild;
+  // const [category] = categories.filter((item) => item.id === data.category);
+  const owner = true;
   const { primary, on, secondary50, secondary70 } = theme.colors;
 
   return (
@@ -36,20 +34,18 @@ export function Appointment({ data, ...rest }: Props) {
           style={styles.guildIconContainer}
           colors={[secondary50, secondary70]}
         >
-          <GuildIcon />
+          <GuildIcon icon={data.icon} />
         </LinearGradient>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>{data.guild.name}</Text>
-            <Text style={styles.category}>{category.title}</Text>
+            <Text style={styles.title}>{data.title}</Text>
+            {/* <Text style={styles.category}>{data.subtitle}</Text> */}
           </View>
           <View style={styles.footer}>
             <View style={styles.dateInfo}>
-              <Image
-                source={CalendarPng}
-                style={{ resizeMode: "cover", width: 18, height: 18 }}
-              />
-              <Text style={styles.date}>{data.date}</Text>
+              <Text style={styles.category}>{data.subtitle}</Text>
+
+              {/* <Text style={styles.date}>{data.date}</Text> */}
             </View>
             <View style={styles.playersInfo}>
               <PlayerSvg fill={owner ? primary : on} />

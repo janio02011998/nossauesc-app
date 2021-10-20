@@ -34,6 +34,15 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
   },
+  containerAct: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  horizontalAct: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
+  },
   separtorView: {
     height: 42,
     borderLeftWidth: 1,

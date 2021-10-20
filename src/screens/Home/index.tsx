@@ -1,41 +1,40 @@
 import React, { useState } from "react";
-import { View, FlatList, Text, ScrollView } from "react-native";
+import {
+  View,
+  FlatList,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 
-import { Profile } from "../../components/Profile";
-import { Appointment } from "../../components/Appointment";
-import { ButtonAdd } from "../../components/ButtonAdd";
-import { ListHeader } from "../../components/ListHeader";
-import { ListDivider } from "../../components/ListDivider";
-import { CategorySelect } from "../../components/CategorySelect";
-import { Background } from "../../components/Background";
-import { FAQ } from "constants/faq";
+import * as C from "components";
 
-import { styles } from "./styles";
 import { useAuth } from "hooks/auth";
-import { ExpandableComponent } from "components/ExpandableComponent";
-import { User } from "components/User";
+import { useSolidarity } from "hooks/useSolidarity";
+import { useAcademicResearch } from "hooks/useAcademicResearch";
+import { useActitivityStudent } from "hooks/useActitivityStudent";
 
-type Props = {};
+import { IActivityStudent } from "interfaces/IActStudent";
+import { IAcademicResearch } from "interfaces/IAcadResearch";
 
-type Item = {
-  id: string;
-  guild: {
-    id: string;
-    name: string;
-    icon: string;
-    owner: boolean;
-  };
-  category: string;
-  date: string;
-  description: string;
-};
+import { theme } from "global/styles/theme";
+import { styles } from "./styles";
 
-export function Home({}: Props) {
+export function Home() {
   const [category, setCategory] = useState("1");
   const [isOwnerSearch, setIsOwnerSwitch] = useState<boolean>(false);
   const { user } = useAuth();
+  const { academicResearch, isLoadingAR } = useAcademicResearch();
+  const { activityStudent, isLoadingAS } = useActitivityStudent();
+  const { solidarity, isLoading } = useSolidarity();
+
+  const study = activityStudent.filter((item) => item.categoryId === "2");
+  const studentEngagement = activityStudent.filter(
+    (item) => item.categoryId === "3"
+  );
+  const sport = activityStudent.filter((item) => item.categoryId === "4");
 
   const { navigate } = useNavigation();
 
@@ -44,15 +43,15 @@ export function Home({}: Props) {
   };
 
   function handleCategorySelect(categoryId: string) {
-    categoryId === category ? setCategory("") : setCategory(categoryId);
+    setCategory(categoryId);
   }
 
-  function handleAppointmentDetails(item: Item) {
+  function handleAppointmentDetails(data: IActivityStudent) {
     navigate("AppointmentDetails", {
-      item,
+      data,
     });
   }
-  function handleAppointmentDetailsSearch(item: Item) {
+  function handleAppointmentDetailsSearch(item: IAcademicResearch) {
     navigate("AppointmentDetailsSearch", {
       item,
     });
@@ -63,21 +62,6 @@ export function Home({}: Props) {
   }
 
   function renderSearch() {
-    const search = [
-      {
-        id: "1",
-        guild: {
-          id: "1",
-          name: "Identifcação de objetos em pessoas através de sistemas embarcados",
-          icon: "https://i.pinimg.com/736x/07/c7/51/07c751e62cc9363d20d181b7a87857d3.jpg",
-          owner: true,
-        },
-        category: "2",
-        date: "22/06 ás 20:40h",
-        description: "Traga seus amigos, vamos aprender mais sobre o cinema :)",
-      },
-    ];
-
     const users = [
       {
         id: "1",
@@ -87,55 +71,32 @@ export function Home({}: Props) {
           "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
         email: "email@email.uesc.br",
       },
-      {
-        id: "2",
-        name: "Kora",
-        course: "Ciência da Computação",
-        avatar:
-          "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
-        email: "email@email.uesc.br",
-      },
-      {
-        id: "3",
-        name: "Kora",
-        course: "Ciência da Computação",
-        avatar:
-          "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
-        email: "email@email.uesc.br",
-      },
-      {
-        id: "4",
-        name: "Kora",
-        course: "Ciência da Computação",
-        avatar:
-          "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
-        email: "email@email.uesc.br",
-      },
-      {
-        id: "5",
-        name: "Kora",
-        course: "Ciência da Computação",
-        avatar:
-          "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
-        email: "email@email.uesc.br",
-      },
     ];
     return (
       <>
-        <ListHeader title="Pesquisa ciêntifica" subtitle="Total 6" />
+        <C.ListHeader
+          title="Pesquisa ciêntifica"
+          subtitle={`Total ${academicResearch.length}`}
+        />
         {!isOwnerSearch ? (
           <FlatList
-            data={search}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <Appointment
-                data={item}
-                onPress={() => handleAppointmentDetailsSearch(item)}
-              />
-            )}
+            data={academicResearch}
+            keyExtractor={(item) => item.uid}
+            renderItem={({ item }) => {
+              const data = {
+                title: item.title,
+                subtitle: "testando aidna",
+              };
+              return (
+                <C.Appointment
+                  data={data}
+                  onPress={() => handleAppointmentDetailsSearch(item)}
+                />
+              );
+            }}
             style={styles.matches}
             showsHorizontalScrollIndicator={false}
-            ItemSeparatorComponent={() => <ListDivider />}
+            ItemSeparatorComponent={() => <C.ListDivider />}
             contentContainerStyle={{ paddingBottom: 69 }}
           />
         ) : (
@@ -143,10 +104,12 @@ export function Home({}: Props) {
             <FlatList
               data={users}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => <User data={item} onPress={() => {}} />}
+              renderItem={({ item }) => (
+                <C.User data={item} onPress={() => {}} />
+              )}
               style={styles.matches}
               showsHorizontalScrollIndicator={false}
-              ItemSeparatorComponent={() => <ListDivider />}
+              ItemSeparatorComponent={() => <C.ListDivider />}
               contentContainerStyle={{ paddingBottom: 69 }}
             />
           </>
@@ -165,97 +128,59 @@ export function Home({}: Props) {
   }
 
   function renderStudy() {
-    const study = [
-      {
-        id: "1",
-        guild: {
-          id: "1",
-          name: "Cinema",
-          icon: "https://i.pinimg.com/736x/07/c7/51/07c751e62cc9363d20d181b7a87857d3.jpg",
-          owner: true,
-        },
-        category: "2",
-        date: "22/06 ás 20:40h",
-        description: "Traga seus amigos, vamos aprender mais sobre o cinema :)",
-      },
-      {
-        id: "2",
-        guild: {
-          id: "1",
-          name: "Geek",
-          icon: "https://cdn.leroymerlin.com.br/products/kit_10_placas_decorativas_mdf_frases_nerd_geek_1566757612_de11_600x600.jpeg",
-          owner: true,
-        },
-        category: "2",
-        date: "22/06 ás 20:40h",
-        description:
-          "Curte Star Wars, Senhor dos Anéis, cultura Geek de maneira geral ? então chega mais!",
-      },
-      {
-        id: "3",
-        guild: {
-          id: "1",
-          name: "Futebol",
-          icon: "https://s2.static.brasilescola.uol.com.br/be/conteudo/images/jogo-de-futebol.jpg",
-          owner: true,
-        },
-        category: "2",
-        date: "22/06 ás 20:40h",
-        description: "Que bater uma resenha sobre futebol? só chegar",
-      },
-    ];
-
     return (
       <>
-        <ListHeader title="Grupo de Estudos" subtitle="Total 6" />
+        <C.ListHeader
+          title="Grupo de Estudos"
+          subtitle={`Total ${study.length}`}
+        />
         <FlatList
           data={study}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Appointment
-              data={item}
-              onPress={() => handleAppointmentDetails(item)}
-            />
-          )}
+          keyExtractor={(item) => item.uid}
+          renderItem={({ item }) => {
+            const data = {
+              title: item.title,
+              subtitle: item.phrase,
+              icon: item.banner,
+            };
+            return (
+              <C.Appointment
+                data={data}
+                onPress={() => handleAppointmentDetails(item)}
+              />
+            );
+          }}
           style={styles.matches}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <ListDivider />}
+          ItemSeparatorComponent={() => <C.ListDivider />}
           contentContainerStyle={{ paddingBottom: 69 }}
         />
       </>
     );
   }
   function renderSports() {
-    const sports = [
-      {
-        id: "1",
-        guild: {
-          id: "1",
-          name: "Vôlei",
-          icon: "https://mrvnoesporte.com.br/wp-content/uploads/2017/09/123748-6-curiosidades-sobre-o-volei-que-voce-precisa-conhecer.jpg",
-          owner: true,
-        },
-        category: "4",
-        date: "22/06 ás 20:40h",
-        description: "Volêi feminino e masculino",
-      },
-    ];
-
     return (
       <>
-        <ListHeader title="Esportes" subtitle="Total 6" />
+        <C.ListHeader title="Esportes" subtitle="Total 6" />
         <FlatList
-          data={sports}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Appointment
-              data={item}
-              onPress={() => handleAppointmentDetails(item)}
-            />
-          )}
+          data={sport}
+          keyExtractor={(item) => item.uid}
+          renderItem={({ item }) => {
+            const data = {
+              title: item.title,
+              subtitle: item.phrase,
+              icon: item.banner,
+            };
+            return (
+              <C.Appointment
+                data={data}
+                onPress={() => handleAppointmentDetails(item)}
+              />
+            );
+          }}
           style={styles.matches}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <ListDivider />}
+          ItemSeparatorComponent={() => <C.ListDivider />}
           contentContainerStyle={{ paddingBottom: 69 }}
         />
       </>
@@ -263,35 +188,31 @@ export function Home({}: Props) {
   }
 
   function renderStudentEngagement() {
-    const studentEngagement = [
-      {
-        id: "1",
-        guild: {
-          id: "1",
-          name: "Debate sobre Representatividade",
-          icon: "http://jornalcobaia.com.br/wp-content/uploads/2018/10/Arte-Espelho-Meu-624x275.jpg",
-          owner: true,
-        },
-        category: "3",
-        date: "22/06 ás 20:40h",
-        description: "História, importância e impacto na atualidade",
-      },
-    ];
     return (
       <>
-        <ListHeader title="Movimento estudantil" subtitle="Total 6" />
+        <C.ListHeader
+          title="Movimento estudantil"
+          subtitle={`Total ${studentEngagement.length}`}
+        />
         <FlatList
           data={studentEngagement}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Appointment
-              data={item}
-              onPress={() => handleAppointmentDetails(item)}
-            />
-          )}
+          keyExtractor={(item) => item.uid}
+          renderItem={({ item }) => {
+            const data = {
+              title: item.title,
+              subtitle: item.phrase,
+              icon: item.banner,
+            };
+            return (
+              <C.Appointment
+                data={data}
+                onPress={() => handleAppointmentDetails(item)}
+              />
+            );
+          }}
           style={styles.matches}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <ListDivider />}
+          ItemSeparatorComponent={() => <C.ListDivider />}
           contentContainerStyle={{ paddingBottom: 69 }}
         />
       </>
@@ -299,21 +220,6 @@ export function Home({}: Props) {
   }
 
   function renderSupportive() {
-    const search = [
-      {
-        id: "1",
-        guild: {
-          id: "1",
-          name: "Identifcação de objetos em pessoas através de sistemas embarcados",
-          icon: "https://i.pinimg.com/736x/07/c7/51/07c751e62cc9363d20d181b7a87857d3.jpg",
-          owner: true,
-        },
-        category: "2",
-        date: "22/06 ás 20:40h",
-        description: "Traga seus amigos, vamos aprender mais sobre o cinema :)",
-      },
-    ];
-
     const users = [
       {
         id: "1",
@@ -326,39 +232,38 @@ export function Home({}: Props) {
     ];
     return (
       <>
-        <ListHeader title="Solidário" subtitle="Total 6" />
-        <ScrollView>
-          {!isOwnerSearch ? (
+        <C.ListHeader title="Solidário" subtitle="Total 6" />
+        {!isOwnerSearch ? (
+          <FlatList
+            data={solidarity}
+            keyExtractor={(item) => item.uid}
+            renderItem={({ item }) => {
+              const data = {
+                title: item.description,
+                subtitle: "testando aidna",
+              };
+              return <C.Appointment data={data} onPress={() => {}} />;
+            }}
+            style={styles.matches}
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => <C.ListDivider />}
+            contentContainerStyle={{ paddingBottom: 69 }}
+          />
+        ) : (
+          <>
             <FlatList
-              data={search}
+              data={users}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <Appointment
-                  data={item}
-                  onPress={() => handleAppointmentDetails(item)}
-                />
+                <C.User data={item} onPress={() => {}} />
               )}
               style={styles.matches}
               showsHorizontalScrollIndicator={false}
-              ItemSeparatorComponent={() => <ListDivider />}
+              ItemSeparatorComponent={() => <C.ListDivider />}
               contentContainerStyle={{ paddingBottom: 69 }}
             />
-          ) : (
-            <>
-              <FlatList
-                data={users}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <User data={item} onPress={() => {}} />
-                )}
-                style={styles.matches}
-                showsHorizontalScrollIndicator={false}
-                ItemSeparatorComponent={() => <ListDivider />}
-                contentContainerStyle={{ paddingBottom: 69 }}
-              />
-            </>
-          )}
-        </ScrollView>
+          </>
+        )}
         <View style={styles.switchSearch}>
           <RectButton onPress={() => toggleSwitch(true)}>
             <Text style={styles.title}>Conexões</Text>
@@ -375,15 +280,24 @@ export function Home({}: Props) {
   function renderFAQ() {
     return (
       <ScrollView style={{ marginTop: 24 }}>
-        {FAQ.map((item, index) => (
+        {C.FAQ.map((item, index) => (
           <View key={index}>
-            <ExpandableComponent item={item} />
+            <C.ExpandableComponent item={item} />
           </View>
         ))}
       </ScrollView>
     );
   }
+
   function renderCategories() {
+    if (isLoading || isLoadingAR || isLoadingAS) {
+      return (
+        <View style={[styles.containerAct, styles.horizontalAct]}>
+          <ActivityIndicator size="large" color={theme.colors.heading} />
+        </View>
+      );
+    }
+
     if (category === "1") {
       return renderSearch();
     }
@@ -405,32 +319,20 @@ export function Home({}: Props) {
   }
 
   return (
-    <Background>
+    <C.Background>
       <View style={styles.header}>
-        <Profile />
+        <C.Profile />
         {user.uid !== "access-basic" && (
-          <ButtonAdd onPress={handleAppointmentCreate} />
+          <C.ButtonAdd onPress={handleAppointmentCreate} />
         )}
       </View>
       <View>
-        <CategorySelect
+        <C.CategorySelect
           categorySelected={category}
           setCategory={handleCategorySelect}
         />
       </View>
-      {/* <ListHeader title="Partidas agendadas" subtitle="Total 6" />
-      <FlatList
-        data={appointments}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Appointment data={item} onPress={handleAppointmentDetails} />
-        )}
-        style={styles.matches}
-        showsHorizontalScrollIndicator={false}
-        ItemSeparatorComponent={() => <ListDivider />}
-        contentContainerStyle={{ paddingBottom: 69 }}
-      /> */}
       {renderCategories()}
-    </Background>
+    </C.Background>
   );
 }

@@ -150,7 +150,6 @@ export function AppointmentCreate() {
       return;
     }
     let pickerResult: any = await ImagePicker.launchImageLibraryAsync();
-    console.log(pickerResult);
     return pickerResult.uri;
   };
 
@@ -180,6 +179,7 @@ export function AppointmentCreate() {
       return { ...prevState, ...value };
     });
   };
+
   const handleDataTimerWeek = (value: any, day: string) => {
     setDataTimerWeek((prevState: any) => {
       const daySelect = {
@@ -254,23 +254,60 @@ export function AppointmentCreate() {
 
           <View style={styles.form}>
             {category === "1" ? (
-              <RectButton onPress={handleOpenGuilds}>
-                <View style={styles.select}>
-                  {course.icon ? <GuildIcon /> : <View style={styles.image} />}
+              <>
+                <RectButton onPress={handleOpenGuilds}>
+                  <View style={styles.select}>
+                    {course.icon ? (
+                      <GuildIcon />
+                    ) : (
+                      <View style={styles.image} />
+                    )}
 
-                  <View style={styles.selectBody}>
-                    <Text style={styles.label}>
-                      {course.name ? course.name : "Selecione o curso"}
+                    <View style={styles.selectBody}>
+                      <Text style={styles.label}>
+                        {course.name ? course.name : "Selecione o curso"}
+                      </Text>
+                    </View>
+
+                    <Feather
+                      name="chevron-right"
+                      size={18}
+                      color={theme.colors.heading}
+                    />
+                  </View>
+                </RectButton>
+                <View>
+                  <View style={styles.field}>
+                    <Text style={[styles.label, { marginBottom: 12 }]}>
+                      Titulo da pesquisa
+                    </Text>
+                    <Text style={styles.caracteresLimit}>
+                      Max 80 caracteres
                     </Text>
                   </View>
-
-                  <Feather
-                    name="chevron-right"
-                    size={18}
-                    color={theme.colors.heading}
+                  <Controller
+                    control={control}
+                    name="title"
+                    defaultValue=""
+                    render={({ field: { onChange, value, onBlur } }) => (
+                      <InputText
+                        maxLength={80}
+                        placeholder="Titulo da pesquisa"
+                        autoCorrect={false}
+                        onChangeText={(value) => onChange(value)}
+                      />
+                    )}
+                    rules={{
+                      required: {
+                        value: categoriesWithFieldsRequired.includes(category)
+                          ? true
+                          : false,
+                        message: "Preencha todos os campos!",
+                      },
+                    }}
                   />
                 </View>
-              </RectButton>
+              </>
             ) : (
               <>
                 <View>

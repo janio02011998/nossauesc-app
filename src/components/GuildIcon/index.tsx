@@ -9,6 +9,7 @@ type Props = {
 
 export function GuildIcon({ icon }: Props) {
   const uri =
+    icon ||
     "https://lh3.googleusercontent.com/proxy/Zt8br8RsdsWV528JEFaN8CJeAuuL2X385rqFw7M0b_y59H8PZgsBboTBXOF6UwBPmFGZrtPsxlJ70nxtQE8ZZPMUL0OJ5JCxmdWiCrR3SK0uG6ozxYi3JFbX2vWP36c";
 
   return (

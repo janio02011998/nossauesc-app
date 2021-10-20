@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  ActivityIndicator,
   FlatList,
   ImageBackground,
   ScrollView,
@@ -18,24 +19,15 @@ import { ListDivider } from "components/ListDivider";
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
 import { ButtonIcon } from "components/ButtonIcon";
-import { HoursMinutes } from "components/HoursMinutes";
 
-type Props = {
-  route: {
-    params: {
-      category: string;
-    };
-  };
-};
-
-type Schedule = {
-  id: string;
-  startAt: string;
-  finishAt: string;
-};
+import {
+  IActivityStudent,
+  ISingleEvent,
+  IWeekDays,
+} from "interfaces/IActStudent";
 
 export function AppointmentDetails({ route }: any) {
-  const { item } = route.params;
+  const { data }: { data: IActivityStudent } = route.params;
 
   const members = [
     {
@@ -52,31 +44,43 @@ export function AppointmentDetails({ route }: any) {
     },
   ];
 
-  const schedule = [
-    {
-      id: "SEGUNDA",
-      startAt: "15:00",
-      finishAt: "19:00",
-    },
-    {
-      id: "QUARTA",
-      startAt: "15:00",
-      finishAt: "19:00",
-    },
-    {
-      id: "SEXTA",
-      startAt: "15:00",
-      finishAt: "19:00",
-    },
-  ];
+  function renderStartAndFinishTime() {
+    const dataF = Object.entries(data.weekSchedule).map((key, index) => {
+      return {
+        day: data.weekSchedule[index].day,
+        startAt: data.weekSchedule[index].startAt,
+        finishAt: data.weekSchedule[index].finishAt,
+      };
+    });
 
-  function renderStartAndFinishTime(item: Schedule) {
+    return (
+      <>
+        {dataF.map((item: IWeekDays) => (
+          <View style={styles.wrapperTime} key={item.day}>
+            <Text style={styles.legend}>{item.day}</Text>
+            <Text style={styles.legend}>
+              {item.startAt} ~ {item.finishAt}
+            </Text>
+          </View>
+        ))}
+      </>
+    );
+  }
+  function renderSingleEvent(item: ISingleEvent) {
     return (
       <View style={styles.wrapperTime}>
-        <Text style={styles.legend}>{item.id}</Text>
+        <Text style={styles.legend}>Evento único</Text>
         <Text style={styles.legend}>
-          {item.startAt} ~ {item.finishAt}
+          {item.date} ~ {item.time}
         </Text>
+      </View>
+    );
+  }
+
+  if (!data) {
+    return (
+      <View style={[styles.containerAct, styles.horizontalAct]}>
+        <ActivityIndicator size="large" color={theme.colors.heading} />
       </View>
     );
   }
@@ -91,29 +95,30 @@ export function AppointmentDetails({ route }: any) {
           </BorderlessButton>
         }
       />
-      <ImageBackground source={{ uri: item.guild.icon }} style={styles.banner}>
+      <ImageBackground source={{ uri: data.banner }} style={styles.banner}>
         <View style={styles.bannerContent}>
-          <Text style={styles.title}>{item.guild.name}</Text>
-          <Text style={styles.subtitle}>{item.description}</Text>
+          <Text style={styles.title}>{data.title}</Text>
+          <Text style={styles.subtitle}>{data.phrase}</Text>
         </View>
       </ImageBackground>
       <ScrollView style={styles.containerScroll}>
         <View style={styles.wrapperDescription}>
-          <Text style={styles.legend}>Descrição</Text>
-          <Text style={styles.legend}>
-            A expressão Lorem ipsum em design gráfico e editoração é um texto
-            padrão em latim utilizado na produção gráfica para preencher os
-            espaços de texto em publicações para testar e ajustar aspectos
-            visuais antes de utilizar conteúdo real.
-          </Text>
+          <Text style={styles.legend}>{data.description}</Text>
+        </View>
+        <View style={styles.wrapperDescription}>
+          <Text style={styles.legend}>Lugar: {data.location}</Text>
         </View>
         <View style={styles.wrapper}>
           <Text style={styles.legendTitle}>Horário</Text>
-          {schedule.map((item) => (
-            <View key={item.id}>{renderStartAndFinishTime(item)}</View>
-          ))}
+          {data.schedule ? (
+            <>
+              <View>{renderSingleEvent(data.schedule)}</View>
+            </>
+          ) : (
+            <>{renderStartAndFinishTime()}</>
+          )}
         </View>
-        <ListHeader title="Membros" subtitle="3" />
+        <ListHeader title="Membros" subtitle={data.members.length} />
         <FlatList
           data={members}
           keyExtractor={(item) => item.id}

@@ -18,9 +18,24 @@ type Props = {
     };
   };
 };
+type IAcademicResearch = {
+  course: string;
+  department: string;
+  description: string;
+  email: string;
+  isActive: boolean;
+  courses: string;
+  members: any;
+  photo: any;
+  providerId: string;
+  searchArea: string;
+  teacher: string;
+  title: string;
+  uid: string;
+};
 
 export function AppointmentDetailsSearch({ route }: any) {
-  const { item } = route.params;
+  const { item }: { item: IAcademicResearch } = route.params;
   const { secondary50, secondary70 } = theme.colors;
 
   return (
@@ -41,48 +56,28 @@ export function AppointmentDetailsSearch({ route }: any) {
           >
             <Image
               source={{
-                uri: "https://lh3.googleusercontent.com/a-/AOh14GhA_moxdJBiZKL55ekpkx5hEMZedMKVhWIAZKDqyw=s40",
+                uri: item.photo,
               }}
               style={styles.avatar}
             />
           </LinearGradient>
-          <Text style={styles.title}>Professor: Elinaldo Santos</Text>
+          <Text style={styles.title}> {item.teacher}</Text>
         </View>
         <View style={styles.containerDivider}>
           <Text style={styles.title}>Área de atuação</Text>
         </View>
         <View style={styles.aditionalInfo}>
-          <Text style={styles.subTitle}>Departamento: DCET</Text>
-          <Text style={styles.subTitle}>Curso: CIÊNCIA DA COMPUTAÇÃO</Text>
+          <Text style={styles.subTitle}>Departamento: {item.department}</Text>
+          <Text style={styles.subTitle}>Curso: {item.course}</Text>
           <Text style={styles.subTitle}>
-            Área de pesquisa: JOGOS; SISTEMA OPERACIONAIS; CAPTURA E DETECÇÃO DE
-            IMAGENS{" "}
+            Área de pesquisa: {item.searchArea}
           </Text>
         </View>
         <View style={styles.containerDivider}>
           <Text style={styles.title}>Descriçaõ do projeto</Text>
         </View>
         <ScrollView style={styles.resume}>
-          <Text style={styles.subTitle}>
-            Este projeto teve como foco a criação de um middleware com
-            arquitetura REST que suporte diversas aplicações e abstraindo a
-            complexidade e o hardware de sensores e atuadores voltados
-            principalmente para IoT. O Middleware foi construído em Java e
-            permite serializar os objetos inteligentes em objetos java,
-            permitindo assim a programação e manipulação de tais objetos,
-            tratando as informações enviadas no formato JSON (Javascript
-            Nation). Os resultados obtidos com a serialização dos objetos em
-            Java resultou em classes que apresentam uma abstração real dos
-            dispositivos testados, sensor de umidade e temperatura, sensores de
-            nível e fluxo de água e válvulas solenoide, evidenciando exito nesta
-            etapa do projeto. Para os teste foram utilizados placas ESP8266,
-            Arduino e Wemos para a troca de mensagem com o midddleware, através
-            da arquitetura REST, implementada em Java, ao qual tinha como
-            objetivo reconhecer e tratar os dados enviado pelas placas, partindo
-            disso temos como excelente os resultados obtidos. O middleware então
-            foi integrado ao software de gerenciamento de bens, constante no
-            outro plano de trabalho deste projeto.
-          </Text>
+          <Text style={styles.subTitle}>{item.description}</Text>
         </ScrollView>
       </View>
       <View style={styles.footer}>
