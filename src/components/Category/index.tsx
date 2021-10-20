@@ -38,7 +38,7 @@ export function Category({
           )}
 
           <Image
-            source={{ uri: icon }}
+            source={icon}
             style={{ width: 95, height: 75 }}
             resizeMode="cover"
           />

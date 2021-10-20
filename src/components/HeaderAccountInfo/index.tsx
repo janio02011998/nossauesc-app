@@ -17,12 +17,12 @@ export function HeaderAccountInfo({ action }: Props) {
   const { navigate } = useNavigation();
 
   function navigateSignIn() {
-    navigate("SignIn");
+    navigate("Home");
   }
 
   return (
     <View style={styles.container}>
-      <BorderlessButton onPress={navigateSignIn}>
+      <BorderlessButton onPress={() => navigateSignIn()}>
         <Feather name="arrow-left" size={24} color={heading} />
       </BorderlessButton>
 

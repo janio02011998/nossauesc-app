@@ -11,7 +11,7 @@ export function useGetUser(user: string) {
       const res = await userRef.doc(user).get();
 
       setLoading(false);
-      return res.data();
+      return { ...res.data(), uid: res.id };
     } catch (err) {
       setLoading(false);
       return new Error("Falha ao consultar!");

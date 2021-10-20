@@ -13,14 +13,6 @@ import { useAuth } from "hooks/auth";
 const { Navigator, Screen } = createStackNavigator();
 
 export function AuthRoutes() {
-  const { user } = useAuth();
-
-  function handleAccess() {
-    if (user.uid === "access-basic" || user.registration === "") {
-      return <Screen name="AccountsInfo" component={AccountsInfo} />;
-    }
-  }
-
   return (
     <Navigator
       screenOptions={{
@@ -30,7 +22,7 @@ export function AuthRoutes() {
         },
       }}
     >
-      {handleAccess()}
+      <Screen name="AccountsInfo" component={AccountsInfo} />
       <Screen name="Home" component={Home} />
       <Screen name="AppointmentDetails" component={AppointmentDetails} />
       <Screen

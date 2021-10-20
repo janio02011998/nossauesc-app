@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { RectButton } from "react-native-gesture-handler";
+import AsyncStorages from "@react-native-async-storage/async-storage";
 
 import { useAuth, User } from "hooks/auth";
 import { useGetUser } from "hooks/useGetUser";
@@ -117,8 +118,15 @@ export function AccountsInfo() {
     }
     async function fetchMyAPI() {
       const response: any | User = await getUser();
-      if (response && user.authorization !== "") {
+      if (response) {
         const user: User = response;
+
+        await AsyncStorages.setItem(
+          "@nossauesc:user",
+          JSON.stringify({
+            user,
+          })
+        );
         setAllInfosUser(user);
         navigate("Home");
       }

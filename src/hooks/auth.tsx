@@ -1,5 +1,13 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import * as Google from "expo-auth-session/providers/google";
+import AsyncStorages from "@react-native-async-storage/async-storage";
+
 import { Auth } from "configs/firebase";
 import firebase from "firebase/app";
 
@@ -23,6 +31,7 @@ type AuthContextData = {
   loading: boolean;
   setAllInfosUser: (user: User) => void;
   signIn: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 type AuthProviderProps = {
@@ -53,7 +62,20 @@ function AuthProvider({ children }: AuthProviderProps) {
     setUser(user);
   };
 
-  React.useEffect(() => {
+  const loadUserStorageData = async () => {
+    const storage = await AsyncStorages.getItem("@nossauesc:user");
+    if (storage) {
+      const useLogged = JSON.parse(storage);
+      setUser(useLogged.user);
+    }
+  };
+
+  const logout = async () => {
+    setUser({} as User);
+    await AsyncStorages.removeItem("@nossauesc:user");
+  };
+
+  useEffect(() => {
     try {
       if (response?.type === "success") {
         const { id_token } = response.params;
@@ -97,6 +119,10 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [response]);
 
+  useEffect(() => {
+    loadUserStorageData();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -104,6 +130,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         signIn,
         setAllInfosUser,
         loading,
+        logout,
       }}
     >
       {children}

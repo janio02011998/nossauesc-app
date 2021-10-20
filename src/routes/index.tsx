@@ -15,7 +15,7 @@ export function Routes() {
 
   return (
     <NavigationContainer>
-      {user.uid ? (
+      {user.providerId ? (
         <AuthRoutes />
       ) : (
         <Navigator
