@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -15,22 +16,21 @@ import { Feather } from "@expo/vector-icons";
 import { RectButton } from "react-native-gesture-handler";
 
 import { useAuth, User } from "hooks/auth";
+import { useGetUser } from "hooks/useGetUser";
 
 import { GuildIcon } from "components/GuildIcon";
 import { GuildProps } from "components/Guild";
 import { Background } from "components/Background";
+import { ModalView } from "components/ModalView";
 import { Firestore } from "configs/firebase/index";
+import { HeaderAccountInfo } from "components/HeaderAccountInfo";
+import { Guilds } from "screens/Guilds";
 
 import studyIcon from "assets/icons/study.png";
 import giveClassesIcon from "assets/icons/give-classes.png";
 
-import { styles } from "./styles";
 import { theme } from "global/styles/theme";
-import { useNavigation } from "@react-navigation/core";
-import { Guilds } from "screens/Guilds";
-import { ModalView } from "components/ModalView";
-import { HeaderAccountInfo } from "components/HeaderAccountInfo";
-import { useGetUser } from "hooks/useGetUser";
+import { styles } from "./styles";
 
 export function AccountsInfo() {
   const { user, setAllInfosUser } = useAuth();
@@ -101,9 +101,11 @@ export function AccountsInfo() {
         if (value === "") data[key] = null;
       });
 
-      Firestore.collection("users").doc(uid).set(data);
+      Firestore.collection("users").doc(user.uid).set(data);
 
-      navigate("Home");
+      if (user.uid) {
+        navigate("Home");
+      }
     } catch (error) {
       ToastAndroid.show("Prencha todos os campos!", ToastAndroid.SHORT);
     }
@@ -115,13 +117,12 @@ export function AccountsInfo() {
     }
     async function fetchMyAPI() {
       const response: any | User = await getUser();
-      if (response) {
+      if (response && user.authorization !== "") {
         const user: User = response;
         setAllInfosUser(user);
         navigate("Home");
       }
     }
-
     fetchMyAPI();
   }, []);
 

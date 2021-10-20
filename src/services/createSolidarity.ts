@@ -31,6 +31,7 @@ export const createSolidarity = async (
     await snapshot.ref.getDownloadURL().then((url) => {
       Firestore.collection(collection).add({
         ...data,
+        conection: "",
         providerId: user.uid,
         isAcitivity: true,
         banner: url,

@@ -10,21 +10,22 @@ import {
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { BorderlessButton } from "react-native-gesture-handler";
+import { connectMembers } from "services/connectMembers";
+import { useNavigation } from "@react-navigation/core";
 
-import * as C from "components";
-
-import { styles } from "./styles";
-import { theme } from "global/styles/theme";
-
+import { useAuth } from "hooks/auth";
+import { handleActivityEvent } from "services/handleActivityEvent";
 import {
   IActivityStudent,
   IMembers,
   ISingleEvent,
   IWeekDays,
 } from "interfaces/IActStudent";
-import { useAuth } from "hooks/auth";
-import { connectMembers } from "services/connectMembers";
-import { useNavigation } from "@react-navigation/core";
+
+import * as C from "components";
+
+import { styles } from "./styles";
+import { theme } from "global/styles/theme";
 
 export function AppointmentDetails({ route }: any) {
   const { data }: { data: IActivityStudent } = route.params;
@@ -102,6 +103,11 @@ export function AppointmentDetails({ route }: any) {
     }
   };
 
+  const handleInactiveTopic = () => {
+    handleActivityEvent("actitivity_student", data.uid, false);
+    goBack();
+  };
+
   if (!data) {
     return (
       <View style={[styles.containerAct, styles.horizontalAct]}>
@@ -159,10 +165,14 @@ export function AppointmentDetails({ route }: any) {
       </ScrollView>
       {user.role !== "access-basic" && (
         <View style={styles.footer}>
-          <C.ButtonIcon
-            title={addOrRemove ? "Sair do grupo" : "Entrar na grupo"}
-            onPress={handleEnterMember}
-          />
+          {user.uid === data.providerId ? (
+            <C.ButtonIcon title="Fechar tópico" onPress={handleInactiveTopic} />
+          ) : (
+            <C.ButtonIcon
+              title={addOrRemove ? "Sair do grupo" : "Entrar na grupo"}
+              onPress={handleEnterMember}
+            />
+          )}
         </View>
       )}
     </C.Background>

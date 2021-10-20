@@ -5,9 +5,11 @@ import {
   Text,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
+import Popover from "react-native-popover-view";
 
 import * as C from "components";
 
@@ -15,6 +17,9 @@ import { useAuth } from "hooks/auth";
 import { useSolidarity } from "hooks/useSolidarity";
 import { useAcademicResearch } from "hooks/useAcademicResearch";
 import { useActitivityStudent } from "hooks/useActitivityStudent";
+
+import { handleActivityEvent } from "services/handleActivityEvent";
+import { connectSolidarity } from "services/connectSolidarity";
 
 import { IActivityStudent } from "interfaces/IActStudent";
 import { IAcademicResearch } from "interfaces/IAcadResearch";
@@ -24,9 +29,11 @@ import { styles } from "./styles";
 
 export function Home() {
   const [category, setCategory] = useState("1");
-  const [isOwnerSearch, setIsOwnerSwitch] = useState<boolean>(true);
+  const [isOwnerSearch, setIsOwnerSwitch] = useState<boolean>(false);
   const [isOwnerSearchSupportive, setIsOwnerSwitchSupportive] =
-    useState<boolean>(true);
+    useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
+
   const { user } = useAuth();
   const { academicResearch, isLoadingAR } = useAcademicResearch();
   const { activityStudent, isLoadingAS } = useActitivityStudent();
@@ -40,12 +47,27 @@ export function Home() {
 
   const { navigate } = useNavigation();
 
+  const handleConectSolidarity = (doc: string) => {
+    const userProps = {
+      id: user.uid,
+      name: user.displayName,
+      course: user.course,
+      avatar: user.photoURL,
+      email: user.email,
+    };
+    connectSolidarity(doc, userProps);
+  };
+
   const toggleSwitch = (status: boolean) => {
     setIsOwnerSwitch(status);
   };
 
   const toggleSwitchSupportive = (status: boolean) => {
     setIsOwnerSwitchSupportive(status);
+  };
+
+  const handleInactiveTopic = (uid: string) => {
+    handleActivityEvent("solidarity", uid, false);
   };
 
   function handleCategorySelect(categoryId: string) {
@@ -230,12 +252,67 @@ export function Home() {
           data={isOwnerSearchSupportive ? ownerSupportive : allSupportive}
           keyExtractor={(item) => item.uid}
           renderItem={({ item }) => {
+            const total = item.conection !== undefined ? 1 : 0;
             const data = {
               title: item.description,
-              subtitle: `0 conexões`,
+              subtitle: `${total} conexões`,
               icon: item.banner,
             };
-            return <C.Appointment data={data} onPress={() => {}} />;
+            return (
+              <Popover
+                popoverStyle={{
+                  backgroundColor: theme.colors.overlay,
+                  borderRadius: 10,
+                  borderBottomColor: "transparent",
+                  padding: 8,
+                }}
+                from={
+                  <TouchableOpacity>
+                    <C.Appointment data={data} onPress={() => {}} />
+                  </TouchableOpacity>
+                }
+              >
+                {isOwnerSearchSupportive ? (
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <View>
+                      {total ? (
+                        <C.User data={item.conection} onPress={() => {}} />
+                      ) : (
+                        <Text style={[styles.title, { marginBottom: 30 }]}>
+                          Sem conexões
+                        </Text>
+                      )}
+                      <TouchableOpacity
+                        onPress={() => handleInactiveTopic(item.uid)}
+                      >
+                        <C.ButtonIcon title="Fechar tópico" />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      paddingHorizontal: 24,
+                      width: 285,
+                      height: 155,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleConectSolidarity(item.uid)}
+                    >
+                      <C.ButtonIcon title="Conectar" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </Popover>
+            );
           }}
           style={styles.matches}
           showsHorizontalScrollIndicator={false}

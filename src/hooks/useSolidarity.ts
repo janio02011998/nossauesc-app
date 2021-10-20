@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { Firestore } from "configs/firebase";
-
-interface ISolidarity {
-  banner: string;
-  description: string;
-  isActive: string;
-  providerId: string;
-  uid: string;
-}
+import { ISolidarity } from "interfaces/ISolidarity";
 
 export const useSolidarity = () => {
   const [solidarity, setSolidarity] = useState<ISolidarity[]>([]);
@@ -26,7 +19,6 @@ export const useSolidarity = () => {
             setSolidarity(allDocs);
             setIsLoading(false);
           } else {
-            console.log("isEmpty");
             setIsLoading(false);
           }
         },

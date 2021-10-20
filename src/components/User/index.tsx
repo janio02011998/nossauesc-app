@@ -45,6 +45,12 @@ export function User({ data, ...rest }: Props) {
           </View>
           <View style={styles.footer}>
             <View style={styles.dateInfo}>
+              <Text style={styles.title}>{data.email}</Text>
+              {/* <Text style={styles.date}>{data.date}</Text> */}
+            </View>
+          </View>
+          <View style={styles.footer}>
+            <View style={styles.dateInfo}>
               <Text style={styles.title}>{data.course}</Text>
               {/* <Text style={styles.date}>{data.date}</Text> */}
             </View>

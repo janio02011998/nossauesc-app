@@ -68,8 +68,8 @@ function AuthProvider({ children }: AuthProviderProps) {
             const email = userResult.providerData[0].email;
             const phoneNumber = userResult.providerData[0].phoneNumber;
             const photoURL = userResult.providerData[0].photoURL;
-            const providerId = userResult.providerData[0].providerId;
-            const uid = userResult.providerData[0].uid;
+            const providerId = userResult.providerData[0].uid;
+            const uid = userResult.uid;
 
             setUser({
               displayName,

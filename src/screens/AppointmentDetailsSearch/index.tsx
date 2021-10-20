@@ -136,7 +136,7 @@ export function AppointmentDetailsSearch({ route }: any) {
             {user.uid !== item.providerId ? (
               <View style={styles.footer}>
                 <ButtonIcon
-                  title={addOrRemove ? "Candidatar-se" : "Remover candidatura"}
+                  title={!addOrRemove ? "Candidatar-se" : "Remover candidatura"}
                   onPress={handleEnterMember}
                 />
               </View>
