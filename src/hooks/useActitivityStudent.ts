@@ -10,22 +10,24 @@ export const useActitivityStudent = () => {
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    const unsubscribe = Firestore.collection("actitivity_student").onSnapshot(
-      (snapshot) => {
-        if (snapshot.docs.length) {
-          const allDocs: any = snapshot.docs.map((doc) => {
-            return { ...doc.data(), uid: doc.id };
-          });
-          setActivityStudent(allDocs);
-          setIsLoadingAS(false);
-        } else {
-          setIsLoadingAS(false);
+    const unsubscribe = Firestore.collection("actitivity_student")
+      .where("isAcitivity", "==", true)
+      .onSnapshot(
+        (snapshot) => {
+          if (snapshot.docs.length) {
+            const allDocs: any = snapshot.docs.map((doc) => {
+              return { ...doc.data(), uid: doc.id };
+            });
+            setActivityStudent(allDocs);
+            setIsLoadingAS(false);
+          } else {
+            setIsLoadingAS(false);
+          }
+        },
+        (error) => {
+          setError(error);
         }
-      },
-      (error) => {
-        setError(error);
-      }
-    );
+      );
 
     return unsubscribe;
   }, []);

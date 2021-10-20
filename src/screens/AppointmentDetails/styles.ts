@@ -44,9 +44,13 @@ export const styles = StyleSheet.create({
     color: theme.colors.heading,
     lineHeight: 21,
   },
+  wrapperMembers: {
+    paddingHorizontal: 24,
+    paddingBottom: 40,
+  },
   members: {
     marginLeft: 24,
-    marginTop: 27,
+    marginTop: 12,
   },
   wrapper: {
     paddingHorizontal: 24,

@@ -1,48 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
   ImageBackground,
   ScrollView,
   Text,
+  ToastAndroid,
   View,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { BorderlessButton } from "react-native-gesture-handler";
 
-import { Member } from "components/Member";
-import { Header } from "components/Header";
-import { ListHeader } from "components/ListHeader";
-import { Background } from "components/Background";
-import { ListDivider } from "components/ListDivider";
+import * as C from "components";
 
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
-import { ButtonIcon } from "components/ButtonIcon";
 
 import {
   IActivityStudent,
+  IMembers,
   ISingleEvent,
   IWeekDays,
 } from "interfaces/IActStudent";
+import { useAuth } from "hooks/auth";
+import { connectMembers } from "services/connectMembers";
+import { useNavigation } from "@react-navigation/core";
 
 export function AppointmentDetails({ route }: any) {
   const { data }: { data: IActivityStudent } = route.params;
-
-  const members = [
-    {
-      id: "1",
-      userName: "Jânio",
-      avatar_url: "https://github.com/janio02011998.png",
-      status: "online",
-    },
-    {
-      id: "2",
-      userName: "Jânio",
-      avatar_url: "https://github.com/janio02011998.png",
-      status: "offline",
-    },
-  ];
+  const { user } = useAuth();
+  const { goBack } = useNavigation();
+  const [addOrRemove, setAddOrRemove] = useState<boolean>(false);
+  const userMember = {
+    id: user.uid,
+    userName: user.displayName,
+    avatar_url: user.photoURL,
+  };
 
   function renderStartAndFinishTime() {
     const dataF = Object.entries(data.weekSchedule).map((key, index) => {
@@ -77,6 +70,38 @@ export function AppointmentDetails({ route }: any) {
     );
   }
 
+  function renderMembers() {
+    return (
+      <FlatList
+        data={data.members}
+        renderItem={({ item }) => (
+          <View style={{ flex: 1, flexDirection: "column", margin: 1 }}>
+            <C.Member data={item} />
+          </View>
+        )}
+        ListHeaderComponent={() => <></>}
+        numColumns={7}
+        keyExtractor={(item) => item.id}
+      />
+    );
+  }
+
+  const handleEnterMember = () => {
+    if (addOrRemove) {
+      const removeMember: IMembers[] = data.members.filter(
+        (member) => member.id !== user.uid
+      );
+      connectMembers("actitivity_student", data.uid, removeMember);
+      ToastAndroid.show("Que pena :(", ToastAndroid.SHORT);
+      goBack();
+    } else {
+      const newArray = data.members;
+      newArray.push(userMember);
+      connectMembers("actitivity_student", data.uid, newArray);
+      ToastAndroid.show("Seja bem-vindo!", ToastAndroid.SHORT);
+    }
+  };
+
   if (!data) {
     return (
       <View style={[styles.containerAct, styles.horizontalAct]}>
@@ -85,9 +110,19 @@ export function AppointmentDetails({ route }: any) {
     );
   }
 
+  useEffect(() => {
+    if (
+      data.members.filter((member) => member.id === userMember.id).length > 0
+    ) {
+      setAddOrRemove(true);
+    } else {
+      setAddOrRemove(false);
+    }
+  }, [data]);
+
   return (
-    <Background>
-      <Header
+    <C.Background>
+      <C.Header
         title="Detalhes"
         action={
           <BorderlessButton>
@@ -101,7 +136,8 @@ export function AppointmentDetails({ route }: any) {
           <Text style={styles.subtitle}>{data.phrase}</Text>
         </View>
       </ImageBackground>
-      <ScrollView style={styles.containerScroll}>
+
+      <ScrollView>
         <View style={styles.wrapperDescription}>
           <Text style={styles.legend}>{data.description}</Text>
         </View>
@@ -118,18 +154,17 @@ export function AppointmentDetails({ route }: any) {
             <>{renderStartAndFinishTime()}</>
           )}
         </View>
-        <ListHeader title="Membros" subtitle={data.members.length} />
-        <FlatList
-          data={members}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <Member data={item} />}
-          ItemSeparatorComponent={() => <ListDivider />}
-          style={styles.members}
-        />
+        <C.ListHeader title="Membros" subtitle={String(data.members.length)} />
+        <View style={styles.wrapperMembers}>{renderMembers()}</View>
       </ScrollView>
-      <View style={styles.footer}>
-        <ButtonIcon title="Entrar na grupo" />
-      </View>
-    </Background>
+      {user.role !== "access-basic" && (
+        <View style={styles.footer}>
+          <C.ButtonIcon
+            title={addOrRemove ? "Sair do grupo" : "Entrar na grupo"}
+            onPress={handleEnterMember}
+          />
+        </View>
+      )}
+    </C.Background>
   );
 }

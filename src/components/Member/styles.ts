@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: theme.fonts.title700,
-    color: theme.colors.line,
+    color: theme.colors.primary,
   },
   subtitle: {
     fontSize: 13,
@@ -26,6 +26,11 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: theme.fonts.text400,
     color: theme.colors.highlight,
+  },
+  wrapperInfoUser: {
+    width: "80%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   bulletStatus: {
     width: 8,

@@ -5,7 +5,7 @@ export interface IActivityStudent {
   location: string;
   isAcitivity: boolean;
   phrase: string;
-  members: any;
+  members: IMembers[];
   providerId: string;
   weekSchedule?: any;
   schedule?: ISingleEvent;
@@ -23,4 +23,10 @@ export interface ISingleEvent {
   date: string;
   day: string;
   time: string;
+}
+
+export interface IMembers {
+  id: string;
+  userName: string;
+  avatar_url: string;
 }

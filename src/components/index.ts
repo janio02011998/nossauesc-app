@@ -8,6 +8,9 @@ import { Background } from "components/Background";
 import { FAQ } from "constants/faq";
 import { User } from "components/User";
 import { ExpandableComponent } from "components/ExpandableComponent";
+import { Member } from "components/Member";
+import { Header } from "components/Header";
+import { ButtonIcon } from "components/ButtonIcon";
 
 export {
   Profile,
@@ -20,4 +23,7 @@ export {
   FAQ,
   User,
   ExpandableComponent,
+  Member,
+  Header,
+  ButtonIcon,
 };

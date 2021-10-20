@@ -52,9 +52,33 @@ export const styles = StyleSheet.create({
   resume: {
     marginVertical: 18,
   },
+  switchSearch: {
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: 24,
+    justifyContent: "flex-end",
+    paddingBottom: 12,
+  },
   footer: {
     paddingHorizontal: 24,
     paddingVertical: 20,
     margin: getBottomSpace(),
+  },
+  separtorView: {
+    height: 42,
+    borderLeftWidth: 1,
+    borderLeftColor: "white",
+  },
+  matches: {
+    height: 225,
+    marginTop: 24,
+    marginLeft: 24,
+  },
+  titleButton: {
+    fontFamily: theme.fonts.title700,
+    color: theme.colors.heading,
+    fontSize: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
   },
 });

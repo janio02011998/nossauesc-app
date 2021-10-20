@@ -24,7 +24,9 @@ import { styles } from "./styles";
 
 export function Home() {
   const [category, setCategory] = useState("1");
-  const [isOwnerSearch, setIsOwnerSwitch] = useState<boolean>(false);
+  const [isOwnerSearch, setIsOwnerSwitch] = useState<boolean>(true);
+  const [isOwnerSearchSupportive, setIsOwnerSwitchSupportive] =
+    useState<boolean>(true);
   const { user } = useAuth();
   const { academicResearch, isLoadingAR } = useAcademicResearch();
   const { activityStudent, isLoadingAS } = useActitivityStudent();
@@ -40,6 +42,10 @@ export function Home() {
 
   const toggleSwitch = (status: boolean) => {
     setIsOwnerSwitch(status);
+  };
+
+  const toggleSwitchSupportive = (status: boolean) => {
+    setIsOwnerSwitchSupportive(status);
   };
 
   function handleCategorySelect(categoryId: string) {
@@ -62,65 +68,49 @@ export function Home() {
   }
 
   function renderSearch() {
-    const users = [
-      {
-        id: "1",
-        name: "Kora",
-        course: "Ciência da Computação",
-        avatar:
-          "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
-        email: "email@email.uesc.br",
-      },
-    ];
+    const ownerResearch = academicResearch.filter(
+      (item) => item.providerId === user.uid
+    );
+    const allResearch = academicResearch.filter(
+      (item) => item.providerId !== user.uid
+    );
     return (
       <>
         <C.ListHeader
           title="Pesquisa ciêntifica"
-          subtitle={`Total ${academicResearch.length}`}
+          subtitle={
+            isOwnerSearch
+              ? `Total ${ownerResearch.length}`
+              : `Total ${allResearch.length}`
+          }
         />
-        {!isOwnerSearch ? (
-          <FlatList
-            data={academicResearch}
-            keyExtractor={(item) => item.uid}
-            renderItem={({ item }) => {
-              const data = {
-                title: item.title,
-                subtitle: "testando aidna",
-              };
-              return (
-                <C.Appointment
-                  data={data}
-                  onPress={() => handleAppointmentDetailsSearch(item)}
-                />
-              );
-            }}
-            style={styles.matches}
-            showsHorizontalScrollIndicator={false}
-            ItemSeparatorComponent={() => <C.ListDivider />}
-            contentContainerStyle={{ paddingBottom: 69 }}
-          />
-        ) : (
-          <>
-            <FlatList
-              data={users}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <C.User data={item} onPress={() => {}} />
-              )}
-              style={styles.matches}
-              showsHorizontalScrollIndicator={false}
-              ItemSeparatorComponent={() => <C.ListDivider />}
-              contentContainerStyle={{ paddingBottom: 69 }}
-            />
-          </>
-        )}
+        <FlatList
+          data={isOwnerSearch ? ownerResearch : allResearch}
+          keyExtractor={(item) => item.uid}
+          renderItem={({ item }) => {
+            const data = {
+              title: item.title,
+              subtitle: "testando aidna",
+            };
+            return (
+              <C.Appointment
+                data={data}
+                onPress={() => handleAppointmentDetailsSearch(item)}
+              />
+            );
+          }}
+          style={styles.matches}
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={() => <C.ListDivider />}
+          contentContainerStyle={{ paddingBottom: 69 }}
+        />
         <View style={styles.switchSearch}>
           <RectButton onPress={() => toggleSwitch(true)}>
-            <Text style={styles.title}>Conexões</Text>
+            <Text style={styles.title}>Minhas pesquisas</Text>
           </RectButton>
           <View style={styles.separtorView} />
           <RectButton onPress={() => toggleSwitch(false)}>
-            <Text style={styles.title}>Meus grupos</Text>
+            <Text style={styles.title}>Todas as pesquisas</Text>
           </RectButton>
         </View>
       </>
@@ -220,57 +210,45 @@ export function Home() {
   }
 
   function renderSupportive() {
-    const users = [
-      {
-        id: "1",
-        name: "Kora",
-        course: "Ciência da Computação",
-        avatar:
-          "https://static.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest/smart/width/250/height/250?cb=20161202194200&path-prefix=pt-br",
-        email: "email@email.uesc.br",
-      },
-    ];
+    const ownerSupportive = solidarity.filter(
+      (item) => item.providerId === user.uid
+    );
+    const allSupportive = solidarity.filter(
+      (item) => item.providerId !== user.uid
+    );
     return (
       <>
-        <C.ListHeader title="Solidário" subtitle="Total 6" />
-        {!isOwnerSearch ? (
-          <FlatList
-            data={solidarity}
-            keyExtractor={(item) => item.uid}
-            renderItem={({ item }) => {
-              const data = {
-                title: item.description,
-                subtitle: "testando aidna",
-              };
-              return <C.Appointment data={data} onPress={() => {}} />;
-            }}
-            style={styles.matches}
-            showsHorizontalScrollIndicator={false}
-            ItemSeparatorComponent={() => <C.ListDivider />}
-            contentContainerStyle={{ paddingBottom: 69 }}
-          />
-        ) : (
-          <>
-            <FlatList
-              data={users}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <C.User data={item} onPress={() => {}} />
-              )}
-              style={styles.matches}
-              showsHorizontalScrollIndicator={false}
-              ItemSeparatorComponent={() => <C.ListDivider />}
-              contentContainerStyle={{ paddingBottom: 69 }}
-            />
-          </>
-        )}
+        <C.ListHeader
+          title="Solidário"
+          subtitle={
+            isOwnerSearchSupportive
+              ? `Total ${ownerSupportive.length}`
+              : `Total ${allSupportive.length}`
+          }
+        />
+        <FlatList
+          data={isOwnerSearchSupportive ? ownerSupportive : allSupportive}
+          keyExtractor={(item) => item.uid}
+          renderItem={({ item }) => {
+            const data = {
+              title: item.description,
+              subtitle: `0 conexões`,
+              icon: item.banner,
+            };
+            return <C.Appointment data={data} onPress={() => {}} />;
+          }}
+          style={styles.matches}
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={() => <C.ListDivider />}
+          contentContainerStyle={{ paddingBottom: 69 }}
+        />
         <View style={styles.switchSearch}>
-          <RectButton onPress={() => toggleSwitch(true)}>
-            <Text style={styles.title}>Conexões</Text>
+          <RectButton onPress={() => toggleSwitchSupportive(true)}>
+            <Text style={styles.title}>Minhas doações</Text>
           </RectButton>
           <View style={styles.separtorView} />
-          <RectButton onPress={() => toggleSwitch(false)}>
-            <Text style={styles.title}>Doações</Text>
+          <RectButton onPress={() => toggleSwitchSupportive(false)}>
+            <Text style={styles.title}>Todas as doações</Text>
           </RectButton>
         </View>
       </>

@@ -10,22 +10,24 @@ export const useAcademicResearch = () => {
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    const unsubscribe = Firestore.collection("academic_research").onSnapshot(
-      (snapshot) => {
-        if (snapshot.docs.length) {
-          const allDocs: any = snapshot.docs.map((doc) => {
-            return { ...doc.data(), uid: doc.id };
-          });
-          setAcademicResearch(allDocs);
-          setIsLoadingAR(false);
-        } else {
-          setIsLoadingAR(false);
+    const unsubscribe = Firestore.collection("academic_research")
+      .where("isAcitivity", "==", true)
+      .onSnapshot(
+        (snapshot) => {
+          if (snapshot.docs.length) {
+            const allDocs: any = snapshot.docs.map((doc) => {
+              return { ...doc.data(), uid: doc.id };
+            });
+            setAcademicResearch(allDocs);
+            setIsLoadingAR(false);
+          } else {
+            setIsLoadingAR(false);
+          }
+        },
+        (error) => {
+          setError(error);
         }
-      },
-      (error) => {
-        setError(error);
-      }
-    );
+      );
 
     return unsubscribe;
   }, []);
