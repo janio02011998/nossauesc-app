@@ -37,3 +37,24 @@ export const categories = [
     icon: faqPNG,
   },
 ];
+
+export const categoriesTeacher = [
+  {
+    id: "1",
+    title: "Pesquisa",
+    icon: noticePNG,
+  },
+  {
+    id: "5",
+    title: "Solidário",
+    icon: solidarityPNG,
+  },
+];
+
+export const categoriesStudentAndTeacher = [
+  {
+    id: "5",
+    title: "Solidário",
+    icon: solidarityPNG,
+  },
+];

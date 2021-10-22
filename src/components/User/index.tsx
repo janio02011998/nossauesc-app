@@ -19,6 +19,7 @@ type UserProps = {
   course: string;
   avatar: string;
   email: string;
+  owner?: boolean;
 };
 
 type Props = RectButtonProps & {
@@ -62,7 +63,7 @@ export function User({ data, ...rest }: Props) {
               />
 
               <Text style={[styles.player, { color: owner ? primary : on }]}>
-                {owner ? "Discente" : "Docente"}
+                {data.owner ? "Docente" : "Discente"}
               </Text>
             </View>
           </View>

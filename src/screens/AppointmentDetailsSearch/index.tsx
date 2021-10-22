@@ -102,15 +102,17 @@ export function AppointmentDetailsSearch({ route }: any) {
             </LinearGradient>
             <Text style={styles.title}> {item.teacher}</Text>
           </View>
-          <View style={styles.switchSearch}>
-            <RectButton onPress={() => toggleSwitch(true)}>
-              <Text style={styles.titleButton}>Projeto</Text>
-            </RectButton>
-            <View style={styles.separtorView} />
-            <RectButton onPress={() => toggleSwitch(false)}>
-              <Text style={styles.titleButton}>Conexões</Text>
-            </RectButton>
-          </View>
+          {user.uid === item.providerId && (
+            <View style={styles.switchSearch}>
+              <RectButton onPress={() => toggleSwitch(true)}>
+                <Text style={styles.titleButton}>Projeto</Text>
+              </RectButton>
+              <View style={styles.separtorView} />
+              <RectButton onPress={() => toggleSwitch(false)}>
+                <Text style={styles.titleButton}>Conexões</Text>
+              </RectButton>
+            </View>
+          )}
         </View>
 
         {isConnectionsOrDescription ? (
@@ -133,19 +135,23 @@ export function AppointmentDetailsSearch({ route }: any) {
             <ScrollView style={styles.resume}>
               <Text style={styles.subTitle}>{item.description}</Text>
             </ScrollView>
-            {user.uid !== item.providerId ? (
-              <View style={styles.footer}>
-                <ButtonIcon
-                  title={!addOrRemove ? "Candidatar-se" : "Remover candidatura"}
-                  onPress={handleEnterMember}
-                />
-              </View>
-            ) : (
-              <View style={styles.footer}>
-                <ButtonIcon
-                  title="Fechar tópico"
-                  onPress={handleInactiveTopic}
-                />
+            {user.uid !== 'access-basic' && (
+              <View>
+                {user.uid !== item.providerId ? (
+                  <View style={styles.footer}>
+                    <ButtonIcon
+                      title={!addOrRemove ? "Candidatar-se" : "Remover candidatura"}
+                      onPress={handleEnterMember}
+                    />
+                  </View>
+                ) : (
+                  <View style={styles.footer}>
+                    <ButtonIcon
+                      title="Fechar tópico"
+                      onPress={handleInactiveTopic}
+                    />
+                  </View>
+                )}
               </View>
             )}
           </>
@@ -153,7 +159,7 @@ export function AppointmentDetailsSearch({ route }: any) {
           <FlatList
             data={item.members}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <C.User data={item} onPress={() => {}} />}
+            renderItem={({ item }) => <C.User data={item} onPress={() => { }} />}
             style={styles.matches}
             showsHorizontalScrollIndicator={false}
             ItemSeparatorComponent={() => <C.ListDivider />}

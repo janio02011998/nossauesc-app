@@ -3,7 +3,8 @@ import * as WebBrowser from "expo-web-browser";
 import { RectButton } from "react-native-gesture-handler";
 import { Text, View, Image, ActivityIndicator } from "react-native";
 
-import { Background } from "components/Background";
+import * as C from 'components';
+
 import { useAuth } from "hooks/auth";
 
 import GoogleIcon from "assets/icons/google.png";
@@ -23,7 +24,7 @@ export function SignIn() {
       email: "usernossauesc@gmail.com",
       phoneNumber: "access-basic",
       photoURL:
-        "https://lh3.googleusercontent.com/proxy/Zt8br8RsdsWV528JEFaN8CJeAuuL2X385rqFw7M0b_y59H8PZgsBboTBXOF6UwBPmFGZrtPsxlJ70nxtQE8ZZPMUL0OJ5JCxmdWiCrR3SK0uG6ozxYi3JFbX2vWP36c",
+        "https://lh3.googleusercontent.com/proxy/https://firebasestorage.googleapis.com/v0/b/nossa-uesc.appspot.com/o/icons%2FBras%C3%A3o_da_UESC.png?alt=media&token=d1277b94-6587-4dc6-992c-e2724ba1a976",
       providerId: "access-basic",
       uid: "access-basic",
       course: "access-basic",
@@ -31,12 +32,18 @@ export function SignIn() {
       registration: "access-basic",
       departament: "access-basic",
       searchArea: "access-basic",
-      authorization: "access-basic",
+      xp: 0,
     });
+
+
   };
 
+  if (loading) {
+    return <C.Load />
+  }
+
   return (
-    <Background>
+    <C.Background>
       <View style={styles.container}>
         <Image
           source={IllustrationImg}
@@ -60,13 +67,18 @@ export function SignIn() {
                 style={styles.buttonWithoutLogin}
                 onPress={signInWithouLogin}
               >
-                <View style={styles.buttonTextContainer}>
+                <View style={styles.buttonTextContainer}
+                  accessible
+                  accessibilityLabel="Entrar sem login"
+                >
                   <Text style={styles.buttonTextWithLogin}>Entrar</Text>
                 </View>
               </RectButton>
               <RectButton style={styles.buttonContainer} onPress={signIn}>
                 <Image source={GoogleIcon} style={styles.googleIcon} />
-                <View style={styles.buttonTextContainer}>
+                <View style={styles.buttonTextContainer}
+                  accessible
+                  accessibilityLabel="Entrar com Google">
                   <Text style={styles.buttonText}>Contiue com Google</Text>
                 </View>
               </RectButton>
@@ -76,6 +88,6 @@ export function SignIn() {
           )}
         </View>
       </View>
-    </Background>
+    </C.Background>
   );
 }

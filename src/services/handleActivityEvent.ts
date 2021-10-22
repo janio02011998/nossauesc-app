@@ -8,7 +8,7 @@ export const handleActivityEvent = async (
 ) => {
   try {
     Firestore.collection(collection).doc(doc).update({
-      isAcitivity: status,
+      isActivity: status,
     });
 
     return "Registrado!";

@@ -15,7 +15,7 @@ import { RectButton } from "react-native-gesture-handler";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/core";
 
-import { Guilds } from "screens/Guilds";
+import { Courses } from "screens/Courses";
 import { useAuth } from "hooks/auth";
 
 import { CategorySelect } from "components/CategorySelect";
@@ -48,6 +48,7 @@ interface IFormData {
   phrase: string;
   location: string;
   title: string;
+  searchArea: string;
 }
 
 export function AppointmentCreate() {
@@ -55,7 +56,7 @@ export function AppointmentCreate() {
   const { goBack } = useNavigation();
 
   const [days, setDays] = useState<string[]>([]);
-  const [category, setCategory] = useState<string>("1");
+  const [category, setCategory] = useState<string>(user.role === "student" ? "5" : "1");
   const [bannerURI, setBannerURI] = useState<string>("");
 
   const categoriesWithFieldsRequired: string[] = ["2", "3", "4"];
@@ -103,7 +104,7 @@ export function AppointmentCreate() {
           weekSchedule: isSchedule ? weekSchedule : null,
           categoryId: category,
           members: [],
-          isAcitivity: true,
+          isActivity: true,
           ...data,
         },
         user
@@ -257,7 +258,7 @@ export function AppointmentCreate() {
               <>
                 <RectButton onPress={handleOpenGuilds}>
                   <View style={styles.select}>
-                    {course.icon ? (
+                    {course.icon === "default" ? (
                       <GuildIcon />
                     ) : (
                       <View style={styles.image} />
@@ -306,6 +307,35 @@ export function AppointmentCreate() {
                       },
                     }}
                   />
+                  <View style={styles.field}>
+                    <Text style={[styles.label, { marginBottom: 12 }]}>
+                      Área de pesquisa
+                    </Text>
+                    <Text style={styles.caracteresLimit}>
+                      Max 80 caracteres
+                    </Text>
+                  </View>
+                  <Controller
+                    control={control}
+                    name="searchArea"
+                    defaultValue=""
+                    render={({ field: { onChange, value, onBlur } }) => (
+                      <InputText
+                        maxLength={80}
+                        placeholder="Processamento de imagens; Blockchain."
+                        autoCorrect={false}
+                        onChangeText={(value) => onChange(value)}
+                      />
+                    )}
+                    rules={{
+                      required: {
+                        value: categoriesWithFieldsRequired.includes(category)
+                          ? true
+                          : false,
+                        message: "Preencha todos os campos!",
+                      },
+                    }}
+                  />
                 </View>
               </>
             ) : (
@@ -313,7 +343,7 @@ export function AppointmentCreate() {
                 <View>
                   {bannerURI === "" ? (
                     <View>
-                      <Text style={styles.title}>Adicionar banner</Text>
+                      <Text style={styles.title}>{category === "5" ? "Adicionar foto" : "Adicionar banner"}</Text>
                       <Controller
                         control={control}
                         name="banner"
@@ -486,7 +516,7 @@ export function AppointmentCreate() {
           </View>
         </ScrollView>
         <ModalView visible={openGuildsModal} closeModal={handleCloseModal}>
-          <Guilds handleGuildSelect={handleCourseSelect} />
+          <Courses handleGuildSelect={handleCourseSelect} />
         </ModalView>
       </Background>
     </KeyboardAvoidingView>

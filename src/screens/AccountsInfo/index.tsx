@@ -25,7 +25,7 @@ import { Background } from "components/Background";
 import { ModalView } from "components/ModalView";
 import { Firestore } from "configs/firebase/index";
 import { HeaderAccountInfo } from "components/HeaderAccountInfo";
-import { Guilds } from "screens/Guilds";
+import { Courses } from "screens/Courses";
 
 import studyIcon from "assets/icons/study.png";
 import giveClassesIcon from "assets/icons/give-classes.png";
@@ -59,6 +59,7 @@ export function AccountsInfo() {
   const handleGuildSelect = (course: GuildProps) => {
     setOpenCourses(false);
     setCourse(course);
+    console.log(course);
   };
 
   const onSubmit = () => {
@@ -89,14 +90,10 @@ export function AccountsInfo() {
         searchArea,
         photoURL: user.photoURL,
         providerId: user.providerId,
-        role: isTeach ? "teach" : "student",
-        authorization: isTeach ? "pending" : "aproved",
+        xp: 0,
+        role: isTeach ? "waiting-authorization" : "student",
       };
 
-      // Object.entries(data).forEach((item) => {
-      //   const [key, value] = item;
-      //   if (value === "") delete data[key];
-      // });
       Object.entries(data).forEach((item) => {
         const [key, value] = item;
         if (value === "") data[key] = null;
@@ -106,6 +103,8 @@ export function AccountsInfo() {
 
       if (user.uid) {
         navigate("Home");
+        console.log("submit")
+
       }
     } catch (error) {
       ToastAndroid.show("Prencha todos os campos!", ToastAndroid.SHORT);
@@ -116,6 +115,7 @@ export function AccountsInfo() {
     if (uid === "access-basic") {
       navigate("Home");
     }
+
     async function fetchMyAPI() {
       const response: any | User = await getUser();
       if (response) {
@@ -165,8 +165,8 @@ export function AccountsInfo() {
             />
           </View>
           <Text style={styles.title}>
-            Seja bem-vindo {displayName}, {"\n"}
-            <Text style={styles.titleBold}>
+            Seja bem-vindo {user.displayName.split(" ")[0]}, {"\n"}
+            < Text style={styles.titleBold}>
               Organizando o ambiente para você :D
             </Text>
           </Text>
@@ -234,7 +234,10 @@ export function AccountsInfo() {
             )}
             <RectButton onPress={handleOpenCourses}>
               <View style={styles.select}>
-                {course.icon ? <GuildIcon /> : <View style={styles.image} />}
+                {course.icon === "default" ?
+                  <GuildIcon /> :
+                  <View style={styles.image}
+                  />}
 
                 <View style={styles.selectBody}>
                   <Text style={styles.label}>
@@ -256,10 +259,10 @@ export function AccountsInfo() {
             </RectButton>
           </View>
           <ModalView visible={openCourses} closeModal={handleCloseModal}>
-            <Guilds handleGuildSelect={handleGuildSelect} />
+            <Courses handleGuildSelect={handleGuildSelect} />
           </ModalView>
         </ScrollView>
       </Background>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView >
   );
 }

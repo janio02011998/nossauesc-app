@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -26,6 +26,7 @@ import { IAcademicResearch } from "interfaces/IAcadResearch";
 
 import { theme } from "global/styles/theme";
 import { styles } from "./styles";
+import { FAQ } from "./Faq";
 
 export function Home() {
   const [category, setCategory] = useState("1");
@@ -34,8 +35,8 @@ export function Home() {
     useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  const { user } = useAuth();
   const { academicResearch, isLoadingAR } = useAcademicResearch();
+  const { user } = useAuth();
   const { activityStudent, isLoadingAS } = useActitivityStudent();
   const { solidarity, isLoading } = useSolidarity();
 
@@ -112,7 +113,8 @@ export function Home() {
           renderItem={({ item }) => {
             const data = {
               title: item.title,
-              subtitle: "testando aidna",
+              subtitle: item.searchArea,
+              connections: item.members.length
             };
             return (
               <C.Appointment
@@ -123,18 +125,42 @@ export function Home() {
           }}
           style={styles.matches}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <C.ListDivider />}
+          ItemSeparatorComponent={() => <C.ListDivider isCentered />}
           contentContainerStyle={{ paddingBottom: 69 }}
         />
-        <View style={styles.switchSearch}>
-          <RectButton onPress={() => toggleSwitch(true)}>
-            <Text style={styles.title}>Minhas pesquisas</Text>
-          </RectButton>
-          <View style={styles.separtorView} />
-          <RectButton onPress={() => toggleSwitch(false)}>
-            <Text style={styles.title}>Todas as pesquisas</Text>
-          </RectButton>
-        </View>
+        {user.role === "teacher" && (
+          <View style={styles.switchSearch}>
+            <RectButton onPress={() => toggleSwitch(true)}>
+              <Text
+                style={
+                  isOwnerSearch
+                    ? [
+                      styles.title,
+                      { fontSize: 20, color: theme.colors.primary },
+                    ]
+                    : styles.title
+                }
+              >
+                Minhas pesquisas
+              </Text>
+            </RectButton>
+            <View style={styles.separtorView} />
+            <RectButton onPress={() => toggleSwitch(false)}>
+              <Text
+                style={
+                  !isOwnerSearch
+                    ? [
+                      styles.title,
+                      { fontSize: 20, color: theme.colors.primary },
+                    ]
+                    : styles.title
+                }
+              >
+                Todas as pesquisas
+              </Text>
+            </RectButton>
+          </View>
+        )}
       </>
     );
   }
@@ -146,55 +172,15 @@ export function Home() {
           title="Grupo de Estudos"
           subtitle={`Total ${study.length}`}
         />
-        <FlatList
-          data={study}
-          keyExtractor={(item) => item.uid}
-          renderItem={({ item }) => {
-            const data = {
-              title: item.title,
-              subtitle: item.phrase,
-              icon: item.banner,
-            };
-            return (
-              <C.Appointment
-                data={data}
-                onPress={() => handleAppointmentDetails(item)}
-              />
-            );
-          }}
-          style={styles.matches}
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <C.ListDivider />}
-          contentContainerStyle={{ paddingBottom: 69 }}
-        />
+        <C.FlatListStudent study={study} />
       </>
     );
   }
   function renderSports() {
     return (
       <>
-        <C.ListHeader title="Esportes" subtitle="Total 6" />
-        <FlatList
-          data={sport}
-          keyExtractor={(item) => item.uid}
-          renderItem={({ item }) => {
-            const data = {
-              title: item.title,
-              subtitle: item.phrase,
-              icon: item.banner,
-            };
-            return (
-              <C.Appointment
-                data={data}
-                onPress={() => handleAppointmentDetails(item)}
-              />
-            );
-          }}
-          style={styles.matches}
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <C.ListDivider />}
-          contentContainerStyle={{ paddingBottom: 69 }}
-        />
+        <C.ListHeader title="Esportes" subtitle={`Total ${sport.length}`} />
+        <C.FlatListStudent study={sport} />
       </>
     );
   }
@@ -206,27 +192,7 @@ export function Home() {
           title="Movimento estudantil"
           subtitle={`Total ${studentEngagement.length}`}
         />
-        <FlatList
-          data={studentEngagement}
-          keyExtractor={(item) => item.uid}
-          renderItem={({ item }) => {
-            const data = {
-              title: item.title,
-              subtitle: item.phrase,
-              icon: item.banner,
-            };
-            return (
-              <C.Appointment
-                data={data}
-                onPress={() => handleAppointmentDetails(item)}
-              />
-            );
-          }}
-          style={styles.matches}
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <C.ListDivider />}
-          contentContainerStyle={{ paddingBottom: 69 }}
-        />
+        <C.FlatListStudent study={studentEngagement} />
       </>
     );
   }
@@ -257,6 +223,8 @@ export function Home() {
               title: item.description,
               subtitle: `${total} conexões`,
               icon: item.banner,
+              connections: total,
+              isSolidarity: true,
             };
             return (
               <Popover
@@ -268,7 +236,7 @@ export function Home() {
                 }}
                 from={
                   <TouchableOpacity>
-                    <C.Appointment data={data} onPress={() => {}} />
+                    <C.Appointment data={data} onPress={() => { }} />
                   </TouchableOpacity>
                 }
               >
@@ -281,7 +249,7 @@ export function Home() {
                   >
                     <View>
                       {total ? (
-                        <C.User data={item.conection} onPress={() => {}} />
+                        <C.User data={item.conection} onPress={() => { }} />
                       ) : (
                         <Text style={[styles.title, { marginBottom: 30 }]}>
                           Sem conexões
@@ -298,17 +266,30 @@ export function Home() {
                   <View
                     style={{
                       paddingHorizontal: 24,
-                      width: 285,
-                      height: 155,
+                      width: 225,
+                      height: 115,
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
-                    <TouchableOpacity
-                      onPress={() => handleConectSolidarity(item.uid)}
-                    >
-                      <C.ButtonIcon title="Conectar" />
-                    </TouchableOpacity>
+                    {!total ? (
+
+                      <View>
+                        {user.uid !== 'basic-access' && (
+                          <TouchableOpacity
+                            onPress={() => handleConectSolidarity(item.uid)}
+                          >
+                            <C.ButtonIcon title="Conectar" />
+                          </TouchableOpacity>
+                        )}
+                      </View>
+
+
+                    ) : (
+                      <Text style={styles.title}>
+                        Este objeto já encontrou um novo dono ;D
+                      </Text>
+                    )}
                   </View>
                 )}
               </Popover>
@@ -316,31 +297,41 @@ export function Home() {
           }}
           style={styles.matches}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <C.ListDivider />}
+          ItemSeparatorComponent={() => <C.ListDivider isCentered />}
           contentContainerStyle={{ paddingBottom: 69 }}
         />
         <View style={styles.switchSearch}>
           <RectButton onPress={() => toggleSwitchSupportive(true)}>
-            <Text style={styles.title}>Minhas doações</Text>
+            <Text
+              style={
+                isOwnerSearchSupportive
+                  ? [
+                    styles.title,
+                    { fontSize: 20, color: theme.colors.primary },
+                  ]
+                  : styles.title
+              }
+            >
+              Minhas doações
+            </Text>
           </RectButton>
           <View style={styles.separtorView} />
           <RectButton onPress={() => toggleSwitchSupportive(false)}>
-            <Text style={styles.title}>Todas as doações</Text>
+            <Text
+              style={
+                !isOwnerSearchSupportive
+                  ? [
+                    styles.title,
+                    { fontSize: 20, color: theme.colors.primary },
+                  ]
+                  : styles.title
+              }
+            >
+              Todas as doações
+            </Text>
           </RectButton>
         </View>
       </>
-    );
-  }
-
-  function renderFAQ() {
-    return (
-      <ScrollView style={{ marginTop: 24 }}>
-        {C.FAQ.map((item, index) => (
-          <View key={index}>
-            <C.ExpandableComponent item={item} />
-          </View>
-        ))}
-      </ScrollView>
     );
   }
 
@@ -369,9 +360,12 @@ export function Home() {
       return renderSupportive();
     }
     if (category === "6") {
-      return renderFAQ();
+      return FAQ();
     }
   }
+
+  useEffect(() => {
+  }, [academicResearch, solidarity, activityStudent]);
 
   return (
     <C.Background>

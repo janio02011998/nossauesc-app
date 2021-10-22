@@ -33,7 +33,7 @@ export const createSolidarity = async (
         ...data,
         conection: "",
         providerId: user.uid,
-        isAcitivity: true,
+        isActivity: true,
         banner: url,
       });
     });

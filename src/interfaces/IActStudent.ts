@@ -3,7 +3,7 @@ export interface IActivityStudent {
   categoryId: string;
   description: string;
   location: string;
-  isAcitivity: boolean;
+  isActivity: boolean;
   phrase: string;
   members: IMembers[];
   providerId: string;

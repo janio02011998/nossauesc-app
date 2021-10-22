@@ -19,7 +19,7 @@ export const createAcademicResearch = async (
       photo: user.photoURL,
       searchArea: user.searchArea,
       email: user.email,
-      isAcitivity: true,
+      isActivity: true,
       members: [],
       ...data,
     });

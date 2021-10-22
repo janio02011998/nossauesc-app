@@ -13,7 +13,7 @@ import { theme } from "global/styles/theme";
 
 type Props = {};
 
-export function Profile({}: Props) {
+export function Profile({ }: Props) {
   const { user, logout } = useAuth();
   const { navigate } = useNavigation();
 
@@ -23,6 +23,10 @@ export function Profile({}: Props) {
     if (user.uid !== "access-basic") {
       navigate("AccountsInfo");
     }
+  };
+
+  const navigateToAdmin = () => {
+    navigate("Admin");
   };
 
   return (
@@ -40,9 +44,17 @@ export function Profile({}: Props) {
           </TouchableWithoutFeedback>
         }
       >
-        <TouchableOpacity onPress={goAccountsInfo}>
-          <Text style={styles.greeting}>Conta</Text>
-        </TouchableOpacity>
+        {user.role === "admin" && (
+          <TouchableOpacity onPress={navigateToAdmin}>
+            <Text style={styles.greeting}>Gerenciar</Text>
+          </TouchableOpacity>
+        )}
+
+        {user.uid !== "access-basic" && (
+          <TouchableOpacity onPress={goAccountsInfo}>
+            <Text style={styles.greeting}>Conta</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={logout}>
           <Text style={styles.greeting}>Sair</Text>
         </TouchableOpacity>

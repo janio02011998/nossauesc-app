@@ -1,5 +1,19 @@
 const FAQ = [
   {
+    TITLE: "Como funciona o Nossa UESC ?",
+    ANSWER:
+      "O objetivo deste aplicativo é facilitar a obtenção de informações no campus da nossa universidade.",
+  },
+  {
+    TITLE: "Quem pode criar eventos ?",
+    ANSWER: "Somentes pessoas autorizadas previamente.",
+  },
+  {
+    TITLE: "Como conseguir uma credência especial para registar eventos ?",
+    ANSWER:
+      "Entrar em contanto com email de suporte janiocarvalhojr@gmail.com.",
+  },
+  {
     TITLE: "Quantos estudantes têm na UESC ?",
     ANSWER: "7476 (2015)",
   },

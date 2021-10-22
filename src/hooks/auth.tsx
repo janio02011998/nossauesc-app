@@ -23,7 +23,7 @@ export type User = {
   registration: string;
   departament: string;
   searchArea: string;
-  authorization: string;
+  xp: number;
 };
 
 type AuthContextData = {
@@ -105,7 +105,7 @@ function AuthProvider({ children }: AuthProviderProps) {
               registration: "",
               departament: "",
               searchArea: "",
-              authorization: "",
+              xp: 0,
             });
           }
         });

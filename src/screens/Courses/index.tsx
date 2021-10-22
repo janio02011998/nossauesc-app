@@ -10,15 +10,21 @@ type Props = {
   handleGuildSelect: (guild: GuildProps) => void;
 };
 
-function Guilds({ handleGuildSelect }: Props) {
+function Courses({ handleGuildSelect }: Props) {
   return (
     <View style={styles.container}>
       <FlatList
         data={COURSES}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Guild data={item} onPress={() => handleGuildSelect(item)} />
-        )}
+        renderItem={({ item }) => {
+          const data = {
+            ...item,
+            icon: null,
+          }
+          return (
+            <Guild data={data} onPress={() => handleGuildSelect(item)} />
+          )
+        }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 68, paddingTop: 104 }}
         ItemSeparatorComponent={() => <ListDivider isCentered />}
@@ -29,4 +35,4 @@ function Guilds({ handleGuildSelect }: Props) {
   );
 }
 
-export { Guilds };
+export { Courses };

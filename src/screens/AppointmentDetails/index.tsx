@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   ImageBackground,
   ScrollView,
@@ -100,6 +99,7 @@ export function AppointmentDetails({ route }: any) {
       newArray.push(userMember);
       connectMembers("actitivity_student", data.uid, newArray);
       ToastAndroid.show("Seja bem-vindo!", ToastAndroid.SHORT);
+      goBack();
     }
   };
 
@@ -110,9 +110,7 @@ export function AppointmentDetails({ route }: any) {
 
   if (!data) {
     return (
-      <View style={[styles.containerAct, styles.horizontalAct]}>
-        <ActivityIndicator size="large" color={theme.colors.heading} />
-      </View>
+      <C.Load />
     );
   }
 

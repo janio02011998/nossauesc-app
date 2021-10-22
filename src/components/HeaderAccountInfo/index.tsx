@@ -7,6 +7,7 @@ import { BorderlessButton } from "react-native-gesture-handler";
 
 import { theme } from "../../global/styles/theme";
 import { styles } from "./style";
+import { useAuth, User } from "hooks/auth";
 
 type Props = {
   action?: ReactNode;
@@ -14,10 +15,15 @@ type Props = {
 
 export function HeaderAccountInfo({ action }: Props) {
   const { heading } = theme.colors;
+  const { user, logout } = useAuth();
   const { navigate } = useNavigation();
 
   function navigateSignIn() {
-    navigate("Home");
+    if (user.role === "") {
+      logout();
+    } else {
+      navigate("Home");
+    }
   }
 
   return (

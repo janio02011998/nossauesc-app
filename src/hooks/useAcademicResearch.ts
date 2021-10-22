@@ -11,7 +11,7 @@ export const useAcademicResearch = () => {
 
   useEffect(() => {
     const unsubscribe = Firestore.collection("academic_research")
-      .where("isAcitivity", "==", true)
+      .where("isActivity", "==", true)
       .onSnapshot(
         (snapshot) => {
           if (snapshot.docs.length) {

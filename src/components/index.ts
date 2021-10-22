@@ -11,6 +11,11 @@ import { ExpandableComponent } from "components/ExpandableComponent";
 import { Member } from "components/Member";
 import { Header } from "components/Header";
 import { ButtonIcon } from "components/ButtonIcon";
+import { PageHeader } from "components/PageHeader";
+import { Load } from "components/Load";
+import { ManagerEvents } from "components/ManagerEvents";
+import { ManagerTeachers } from "components/ManagerTeachers";
+import { FlatListStudent } from "components/FlatLists";
 
 export {
   Profile,
@@ -26,4 +31,9 @@ export {
   Member,
   Header,
   ButtonIcon,
+  PageHeader,
+  Load,
+  ManagerEvents,
+  FlatListStudent,
+  ManagerTeachers,
 };

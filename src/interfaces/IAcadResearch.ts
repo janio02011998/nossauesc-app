@@ -3,7 +3,7 @@ export interface IAcademicResearch {
   department: string;
   description: string;
   email: string;
-  isActive: boolean;
+  isActivity: boolean;
   courses: string;
   members: IMembersAcademic[];
   photo: any;

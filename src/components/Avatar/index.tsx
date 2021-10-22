@@ -1,16 +1,19 @@
 import React from 'react';
 import { Text, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import uescPng from 'assets/icons/uesc.png';
 
 import { theme } from '../../global/styles/theme';
 
 import { styles } from './styles';
+import { useAuth } from 'hooks/auth';
 
 type Props = {
     urlImage: string;
 }
 
 export function Avatar({ urlImage }: Props) {
+    const { user } = useAuth();
     const { secondary50, secondary70 } = theme.colors;
 
     return (
@@ -19,7 +22,7 @@ export function Avatar({ urlImage }: Props) {
             colors={[secondary50, secondary70]}
         >
             <Image
-                source={{ uri: urlImage }}
+                source={user.uid === "access-basic" ? uescPng : { uri: urlImage }}
                 style={styles.avatar}
             />
         </LinearGradient>

@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import { Firestore } from "configs/firebase";
-import { ISolidarity } from "interfaces/ISolidarity";
+import { User } from "./auth";
 
-export const useSolidarity = () => {
-  const [solidarity, setSolidarity] = useState<ISolidarity[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+export function useGetAllUsers() {
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
+  const [teachers, setTeacher] = useState<User[]>([]);
 
   useEffect(() => {
-    const unsubscribe = Firestore.collection("solidarity")
-      .where("isActivity", "==", true)
+    const unsubscribe = Firestore.collection("users")
+      .where("role", "==", "waiting-authorization")
       .onSnapshot(
         (snapshot) => {
           if (snapshot.docs.length) {
             const allDocs: any = snapshot.docs.map((doc) => {
               return { ...doc.data(), uid: doc.id };
             });
-            setSolidarity(allDocs);
-            setIsLoading(false);
+            setTeacher(allDocs);
+            setLoading(false);
           } else {
-            setIsLoading(false);
+            setLoading(false);
           }
         },
         (error) => {
@@ -30,9 +30,5 @@ export const useSolidarity = () => {
     return unsubscribe;
   }, []);
 
-  return {
-    solidarity,
-    isLoading,
-    error,
-  };
-};
+  return { loading, teachers, error };
+}

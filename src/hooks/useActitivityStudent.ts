@@ -11,7 +11,7 @@ export const useActitivityStudent = () => {
 
   useEffect(() => {
     const unsubscribe = Firestore.collection("actitivity_student")
-      .where("isAcitivity", "==", true)
+      .where("isActivity", "==", true)
       .onSnapshot(
         (snapshot) => {
           if (snapshot.docs.length) {
