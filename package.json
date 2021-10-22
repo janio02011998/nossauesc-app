@@ -24,8 +24,6 @@
     "expo-camera": "~11.0.2",
     "expo-constants": "~10.1.3",
     "expo-font": "~9.1.0",
-    "expo-google-app-auth": "^8.2.2",
-    "expo-google-sign-in": "~9.1.0",
     "expo-image-picker": "~10.1.4",
     "expo-linear-gradient": "~9.1.0",
     "expo-random": "~11.1.2",

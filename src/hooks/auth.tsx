@@ -86,7 +86,6 @@ function AuthProvider({ children }: AuthProviderProps) {
   };
 
   useEffect(() => {
-    console.log(response);
     try {
       if (response?.type === "success") {
         const { id_token } = response.params;

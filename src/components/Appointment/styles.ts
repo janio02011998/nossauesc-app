@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
     color: theme.colors.heading,
     fontSize: 12,
     marginRight: 24,
+    maxWidth: 105,
   },
   footer: {
     width: "100%",

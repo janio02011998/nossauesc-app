@@ -114,7 +114,7 @@ export function Home() {
             const data = {
               title: item.title,
               subtitle: item.searchArea,
-              connections: item.members.length
+              connections: item.members.length,
             };
             return (
               <C.Appointment
@@ -135,9 +135,9 @@ export function Home() {
                 style={
                   isOwnerSearch
                     ? [
-                      styles.title,
-                      { fontSize: 20, color: theme.colors.primary },
-                    ]
+                        styles.title,
+                        { fontSize: 20, color: theme.colors.primary },
+                      ]
                     : styles.title
                 }
               >
@@ -150,9 +150,9 @@ export function Home() {
                 style={
                   !isOwnerSearch
                     ? [
-                      styles.title,
-                      { fontSize: 20, color: theme.colors.primary },
-                    ]
+                        styles.title,
+                        { fontSize: 20, color: theme.colors.primary },
+                      ]
                     : styles.title
                 }
               >
@@ -236,7 +236,7 @@ export function Home() {
                 }}
                 from={
                   <TouchableOpacity>
-                    <C.Appointment data={data} onPress={() => { }} />
+                    <C.Appointment data={data} onPress={() => {}} />
                   </TouchableOpacity>
                 }
               >
@@ -249,7 +249,7 @@ export function Home() {
                   >
                     <View>
                       {total ? (
-                        <C.User data={item.conection} onPress={() => { }} />
+                        <C.User data={item.conection} onPress={() => {}} />
                       ) : (
                         <Text style={[styles.title, { marginBottom: 30 }]}>
                           Sem conexões
@@ -273,9 +273,8 @@ export function Home() {
                     }}
                   >
                     {!total ? (
-
                       <View>
-                        {user.uid !== 'basic-access' && (
+                        {user.uid !== "basic-access" && (
                           <TouchableOpacity
                             onPress={() => handleConectSolidarity(item.uid)}
                           >
@@ -283,8 +282,6 @@ export function Home() {
                           </TouchableOpacity>
                         )}
                       </View>
-
-
                     ) : (
                       <Text style={styles.title}>
                         Este objeto já encontrou um novo dono ;D
@@ -300,37 +297,39 @@ export function Home() {
           ItemSeparatorComponent={() => <C.ListDivider isCentered />}
           contentContainerStyle={{ paddingBottom: 69 }}
         />
-        <View style={styles.switchSearch}>
-          <RectButton onPress={() => toggleSwitchSupportive(true)}>
-            <Text
-              style={
-                isOwnerSearchSupportive
-                  ? [
-                    styles.title,
-                    { fontSize: 20, color: theme.colors.primary },
-                  ]
-                  : styles.title
-              }
-            >
-              Minhas doações
-            </Text>
-          </RectButton>
-          <View style={styles.separtorView} />
-          <RectButton onPress={() => toggleSwitchSupportive(false)}>
-            <Text
-              style={
-                !isOwnerSearchSupportive
-                  ? [
-                    styles.title,
-                    { fontSize: 20, color: theme.colors.primary },
-                  ]
-                  : styles.title
-              }
-            >
-              Todas as doações
-            </Text>
-          </RectButton>
-        </View>
+        {user.uid !== "access-basic" && (
+          <View style={styles.switchSearch}>
+            <RectButton onPress={() => toggleSwitchSupportive(true)}>
+              <Text
+                style={
+                  isOwnerSearchSupportive
+                    ? [
+                        styles.title,
+                        { fontSize: 20, color: theme.colors.primary },
+                      ]
+                    : styles.title
+                }
+              >
+                Minhas doações
+              </Text>
+            </RectButton>
+            <View style={styles.separtorView} />
+            <RectButton onPress={() => toggleSwitchSupportive(false)}>
+              <Text
+                style={
+                  !isOwnerSearchSupportive
+                    ? [
+                        styles.title,
+                        { fontSize: 20, color: theme.colors.primary },
+                      ]
+                    : styles.title
+                }
+              >
+                Todas as doações
+              </Text>
+            </RectButton>
+          </View>
+        )}
       </>
     );
   }
@@ -364,8 +363,7 @@ export function Home() {
     }
   }
 
-  useEffect(() => {
-  }, [academicResearch, solidarity, activityStudent]);
+  useEffect(() => {}, [academicResearch, solidarity, activityStudent]);
 
   return (
     <C.Background>
