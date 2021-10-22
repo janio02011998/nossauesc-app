@@ -3,7 +3,7 @@ import * as WebBrowser from "expo-web-browser";
 import { RectButton } from "react-native-gesture-handler";
 import { Text, View, Image, ActivityIndicator } from "react-native";
 
-import * as C from 'components';
+import * as C from "components";
 
 import { useAuth } from "hooks/auth";
 
@@ -34,13 +34,11 @@ export function SignIn() {
       searchArea: "access-basic",
       xp: 0,
     });
-
-
   };
 
-  if (loading) {
-    return <C.Load />
-  }
+  // if (loading) {
+  //   return <C.Load />;
+  // }
 
   return (
     <C.Background>
@@ -67,7 +65,8 @@ export function SignIn() {
                 style={styles.buttonWithoutLogin}
                 onPress={signInWithouLogin}
               >
-                <View style={styles.buttonTextContainer}
+                <View
+                  style={styles.buttonTextContainer}
                   accessible
                   accessibilityLabel="Entrar sem login"
                 >
@@ -76,9 +75,11 @@ export function SignIn() {
               </RectButton>
               <RectButton style={styles.buttonContainer} onPress={signIn}>
                 <Image source={GoogleIcon} style={styles.googleIcon} />
-                <View style={styles.buttonTextContainer}
+                <View
+                  style={styles.buttonTextContainer}
                   accessible
-                  accessibilityLabel="Entrar com Google">
+                  accessibilityLabel="Entrar com Google"
+                >
                   <Text style={styles.buttonText}>Contiue com Google</Text>
                 </View>
               </RectButton>

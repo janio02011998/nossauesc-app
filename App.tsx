@@ -12,7 +12,7 @@ import { Background } from "./src/components/Background";
 import { Routes } from "./src/routes";
 import { AuthProvider } from "./src/hooks/auth";
 
-LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
+LogBox.ignoreAllLogs(true);
 
 export default function App() {
   const [fontsLoaded] = useFonts({

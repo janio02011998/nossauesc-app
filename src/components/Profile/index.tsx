@@ -13,7 +13,7 @@ import { theme } from "global/styles/theme";
 
 type Props = {};
 
-export function Profile({ }: Props) {
+export function Profile({}: Props) {
   const { user, logout } = useAuth();
   const { navigate } = useNavigation();
 
@@ -55,7 +55,7 @@ export function Profile({ }: Props) {
             <Text style={styles.greeting}>Conta</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={logout}>
+        <TouchableOpacity onPress={async () => await logout()}>
           <Text style={styles.greeting}>Sair</Text>
         </TouchableOpacity>
       </Popover>

@@ -18,9 +18,9 @@ export function HeaderAccountInfo({ action }: Props) {
   const { user, logout } = useAuth();
   const { navigate } = useNavigation();
 
-  function navigateSignIn() {
+  async function navigateSignIn() {
     if (user.role === "") {
-      logout();
+      await logout();
     } else {
       navigate("Home");
     }

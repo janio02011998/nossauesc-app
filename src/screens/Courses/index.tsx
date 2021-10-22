@@ -16,15 +16,15 @@ function Courses({ handleGuildSelect }: Props) {
       <FlatList
         data={COURSES}
         keyExtractor={(item) => item.id}
+        accessible
         renderItem={({ item }) => {
           const data = {
             ...item,
             icon: null,
-          }
-          return (
-            <Guild data={data} onPress={() => handleGuildSelect(item)} />
-          )
+          };
+          return <Guild data={data} onPress={() => handleGuildSelect(item)} />;
         }}
+        accessibilityLabel="Lista de cursos"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 68, paddingTop: 104 }}
         ItemSeparatorComponent={() => <ListDivider isCentered />}

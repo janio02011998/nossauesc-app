@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Alert,
   ToastAndroid,
+  TouchableOpacity,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { RectButton } from "react-native-gesture-handler";
@@ -103,8 +104,7 @@ export function AccountsInfo() {
 
       if (user.uid) {
         navigate("Home");
-        console.log("submit")
-
+        console.log("submit");
       }
     } catch (error) {
       ToastAndroid.show("Prencha todos os campos!", ToastAndroid.SHORT);
@@ -156,7 +156,13 @@ export function AccountsInfo() {
             paddingTop: 25,
           }}
         >
-          <View style={{ alignItems: "center" }}>
+          <View
+            style={{ alignItems: "center" }}
+            accessible
+            accessibilityLabel={`Seja bem-vindo ${
+              user.displayName.split(" ")[0]
+            }`}
+          >
             <Image
               source={{
                 uri: photoURL,
@@ -166,13 +172,20 @@ export function AccountsInfo() {
           </View>
           <Text style={styles.title}>
             Seja bem-vindo {user.displayName.split(" ")[0]}, {"\n"}
-            < Text style={styles.titleBold}>
+            <Text style={styles.titleBold}>
               Organizando o ambiente para você :D
             </Text>
           </Text>
 
-          <View style={styles.buttonsContainer}>
-            <RectButton
+          <View
+            style={styles.buttonsContainer}
+            accessible
+            accessibilityLabel="Escolha entre aluno e professor"
+          >
+            <TouchableOpacity
+              activeOpacity={0.7}
+              accessible
+              accessibilityLabel="Aluno"
               onPress={() => setIsTeacher(false)}
               style={
                 isTeach ? [styles.button, styles.buttonPrimary] : styles.button
@@ -181,9 +194,11 @@ export function AccountsInfo() {
               <Image source={studyIcon} />
 
               <Text style={styles.buttonText}>Aluno</Text>
-            </RectButton>
-
-            <RectButton
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              accessible
+              accessibilityLabel="Professor"
               onPress={() => setIsTeacher(true)}
               style={
                 !isTeach ? [styles.button, styles.buttonPrimary] : styles.button
@@ -192,7 +207,7 @@ export function AccountsInfo() {
               <Image source={giveClassesIcon} />
 
               <Text style={styles.buttonText}>Professor</Text>
-            </RectButton>
+            </TouchableOpacity>
           </View>
           <View>
             <View>
@@ -204,6 +219,8 @@ export function AccountsInfo() {
                 keyboardType="numeric"
                 placeholder="Ex: 201620039"
                 onChangeText={setRegistration}
+                accessible
+                accessibilityLabel="Digite sua matrícula"
               />
             </View>
             {isTeach && (
@@ -218,14 +235,18 @@ export function AccountsInfo() {
                   style={styles.input}
                   placeholder="DCET"
                   onChangeText={setDepartament}
+                  accessible
+                  accessibilityLabel="Digite seu departamento"
                 />
                 <View style={styles.field}>
                   <Text style={[styles.label, { marginBottom: 12 }]}>
-                    Aréa de pesquisa <Text style={{ color: "red" }}>*</Text>
+                    Área de pesquisa <Text style={{ color: "red" }}>*</Text>
                   </Text>
                   <Text style={styles.caracteresLimit}>Max 80 caracteres</Text>
                 </View>
                 <TextInput
+                  accessible
+                  accessibilityLabel="Digite sua área de pesquisa"
                   style={styles.input}
                   placeholder="Processamento de imagens e segurança de redes"
                   onChangeText={setSearchArea}
@@ -233,11 +254,16 @@ export function AccountsInfo() {
               </>
             )}
             <RectButton onPress={handleOpenCourses}>
-              <View style={styles.select}>
-                {course.icon === "default" ?
-                  <GuildIcon /> :
-                  <View style={styles.image}
-                  />}
+              <View
+                style={styles.select}
+                accessible
+                accessibilityLabel="Aperte para abrir uma lista e selecione seu curso seu curso"
+              >
+                {course.icon === "default" ? (
+                  <GuildIcon />
+                ) : (
+                  <View style={styles.image} />
+                )}
 
                 <View style={styles.selectBody}>
                   <Text style={styles.label}>
@@ -253,7 +279,11 @@ export function AccountsInfo() {
               </View>
             </RectButton>
           </View>
-          <View style={{ marginTop: 25, paddingBottom: 40 }}>
+          <View
+            style={{ marginTop: 25, paddingBottom: 40 }}
+            accessible
+            accessibilityLabel="Salvar conta"
+          >
             <RectButton style={styles.buttonConfirm} onPress={() => onSubmit()}>
               <Text style={styles.titleButton}>Salvar</Text>
             </RectButton>
@@ -263,6 +293,6 @@ export function AccountsInfo() {
           </ModalView>
         </ScrollView>
       </Background>
-    </KeyboardAvoidingView >
+    </KeyboardAvoidingView>
   );
 }

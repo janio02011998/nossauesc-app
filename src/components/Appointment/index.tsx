@@ -37,8 +37,8 @@ export function Appointment({ data, ...rest }: Props) {
     0: `To aqui esperando você`,
     2: "Me leva",
     3: "Oie, 👉👈",
-    4: `Roi ${user.displayName.split(' ')[0]}`,
-  }
+    4: `Roi ${user.displayName.split(" ")[0]}`,
+  };
 
   const phraseDisplay = phraseSolidarity[idPhrase];
 
@@ -50,7 +50,11 @@ export function Appointment({ data, ...rest }: Props) {
 
   return (
     <RectButton {...rest}>
-      <View style={styles.container}>
+      <View
+        style={styles.container}
+        accessible
+        accessibilityLabel={`Botão para acessa informações de ${data.title}`}
+      >
         <LinearGradient
           style={styles.guildIconContainer}
           colors={[secondary50, secondary70]}
@@ -75,8 +79,10 @@ export function Appointment({ data, ...rest }: Props) {
                     source={data.connections ? happy : unHappy}
                     style={{ resizeMode: "contain", width: 18, height: 18 }}
                   />
-                  <Text style={[styles.player, { color: owner ? primary : on }]}>
-                    {data.connections ? 'Já fui eslhido :)' : phraseDisplay}
+                  <Text
+                    style={[styles.player, { color: owner ? primary : on }]}
+                  >
+                    {data.connections ? "Já fui eslhido :)" : phraseDisplay}
                   </Text>
                 </>
               ) : (
@@ -85,7 +91,9 @@ export function Appointment({ data, ...rest }: Props) {
                     source={medal}
                     style={{ resizeMode: "contain", width: 18, height: 18 }}
                   />
-                  <Text style={[styles.player, { color: owner ? primary : on }]}>
+                  <Text
+                    style={[styles.player, { color: owner ? primary : on }]}
+                  >
                     Conexões {data.connections}
                   </Text>
                 </>

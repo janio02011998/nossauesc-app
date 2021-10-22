@@ -52,7 +52,10 @@ function AuthProvider({ children }: AuthProviderProps) {
   async function signIn() {
     try {
       setLoading(true);
-      await promptAsync();
+      const response = await promptAsync();
+      if (response.type === "dismiss") {
+        setLoading(false);
+      }
     } catch {
       throw new Error("Não foi possível autenticar!");
     }
@@ -63,10 +66,17 @@ function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const loadUserStorageData = async () => {
-    const storage = await AsyncStorages.getItem("@nossauesc:user");
-    if (storage) {
-      const useLogged = JSON.parse(storage);
-      setUser(useLogged.user);
+    try {
+      setLoading(true);
+      const storage = await AsyncStorages.getItem("@nossauesc:user");
+      if (storage) {
+        const useLogged = JSON.parse(storage);
+        setUser(useLogged.user);
+      }
+    } catch {
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,6 +86,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   };
 
   useEffect(() => {
+    console.log(response);
     try {
       if (response?.type === "success") {
         const { id_token } = response.params;
@@ -111,10 +122,10 @@ function AuthProvider({ children }: AuthProviderProps) {
         });
 
         setLoading(false);
-      } else {
-        setLoading(false);
       }
     } catch (err) {
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   }, [response]);
