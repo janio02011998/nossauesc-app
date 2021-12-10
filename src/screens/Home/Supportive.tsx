@@ -32,6 +32,7 @@ export function Supportive(solidarity: ISolidarity[], user: User) {
       course: user.course,
       avatar: user.photoURL,
       email: user.email,
+      xp: user.xp,
     };
     connectSolidarity(doc, userProps);
   };

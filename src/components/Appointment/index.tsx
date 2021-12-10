@@ -21,7 +21,7 @@ type AppointmentProps = {
   subtitle: string;
   icon?: string;
   uid?: string;
-  connections: number;
+  connections?: number;
   isSolidarity?: boolean;
 };
 
@@ -45,8 +45,9 @@ export function Appointment({ data, ...rest }: Props) {
   const owner = true;
   const { primary, on, secondary50, secondary70 } = theme.colors;
 
-  const medalStep1 = data.connections < 2 ? bronzeMedal : plateMedal;
-  const medal = data.connections > 6 ? goldMedal : medalStep1;
+  const totalConnections = data.connections ? data.connections : 0;
+  const medalStep1 = totalConnections < 2 ? bronzeMedal : plateMedal;
+  const medal = totalConnections > 6 ? goldMedal : medalStep1;
 
   return (
     <RectButton {...rest}>
