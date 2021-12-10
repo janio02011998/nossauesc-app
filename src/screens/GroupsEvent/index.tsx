@@ -1,19 +1,19 @@
-import React, { useEffect, } from "react";
+import React, { useEffect } from "react";
 import { FlatList, Text, View } from "react-native";
 
 import { useAcademicResearch } from "hooks/useAcademicResearch";
 import { useActitivityStudent } from "hooks/useActitivityStudent";
 import { useSolidarity } from "hooks/useSolidarity";
 
-import * as C from 'components';
+import * as C from "components";
 
 import { styles } from "./styles";
 
 interface IAllCategories {
-  title: string,
-  subtitle: string,
+  title: string;
+  subtitle: string;
   icon?: string;
-  uid: string,
+  uid: string;
 }
 
 export function GroupsEvent() {
@@ -26,37 +26,37 @@ export function GroupsEvent() {
       title: item.title,
       subtitle: item.searchArea,
       icon: undefined,
-      uid: item.uid
+      uid: item.uid,
     };
-  })
+  });
 
   const formartStudent = activityStudent.map((item) => {
     return {
       title: item.title,
       subtitle: item.phrase,
       icon: item.banner,
-      uid: item.uid
+      uid: item.uid,
     };
   });
 
   const formartSolidarity = solidarity.map((item) => {
-    const total = item.conection !== undefined ? 1 : 0;
+    const total = item.connection !== undefined ? 1 : 0;
 
     return {
       title: item.description,
       subtitle: `${total} conexões`,
       icon: item.banner,
-      uid: item.uid
+      uid: item.uid,
     };
-  })
+  });
 
   const allData: IAllCategories[] = [
     ...formartResearch,
     ...formartStudent,
-    ...formartSolidarity
+    ...formartSolidarity,
   ];
 
-  useEffect(() => { }, [academicResearch, activityStudent, solidarity]);
+  useEffect(() => {}, [academicResearch, activityStudent, solidarity]);
 
   if (allData.length === 0) {
     return (
@@ -66,7 +66,7 @@ export function GroupsEvent() {
           <Text style={styles.title}>Sem pedidos pendentes!</Text>
         </View>
       </View>
-    )
+    );
   }
 
   return (
@@ -76,15 +76,14 @@ export function GroupsEvent() {
         {isLoadingAR || isLoadingAS || isLoading ? (
           <C.Load />
         ) : (
-
           <FlatList
             data={allData}
             keyExtractor={(item) => item.uid}
             renderItem={({ item }) => {
               const data = {
-                ...item
+                ...item,
               };
-              return <C.ManagerEvents data={data} />
+              return <C.ManagerEvents data={data} />;
             }}
             showsHorizontalScrollIndicator={false}
             ItemSeparatorComponent={() => <C.ListDivider />}

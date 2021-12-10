@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as WebBrowser from "expo-web-browser";
 import { RectButton } from "react-native-gesture-handler";
 import { Text, View, Image, ActivityIndicator } from "react-native";
 
@@ -12,8 +11,6 @@ import IllustrationImg from "assets/illustration.png";
 
 import { styles } from "./style";
 import { theme } from "global/styles/theme";
-
-WebBrowser.maybeCompleteAuthSession();
 
 export function SignIn() {
   const { signIn, loading, setAllInfosUser } = useAuth();
@@ -51,7 +48,7 @@ export function SignIn() {
         <View style={styles.content}>
           <Text style={styles.title}>
             Encontre {`\n`}
-            suas ativides {`\n`}
+            suas atividades {`\n`}
             facilmente {`\n`}
           </Text>
           <Text style={styles.subtitle}>

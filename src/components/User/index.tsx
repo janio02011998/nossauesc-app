@@ -2,16 +2,13 @@ import React from "react";
 import { RectButton, RectButtonProps } from "react-native-gesture-handler";
 import { Image, Text, View } from "react-native";
 
-import { GuildIcon } from "../GuildIcon";
-import { categories } from "constants/categories";
-
-import PlayerSvg from "../../assets/player.svg";
-import CalendarSvg from "../../assets/calendar.svg";
+import goldMedal from "assets/icons/gold.png";
+import plateMedal from "assets/icons/plate.png";
+import bronzeMedal from "assets/icons/bronze.png";
 
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
 import { LinearGradient } from "expo-linear-gradient";
-import goldMedal from "assets/icons/gold.png";
 
 type UserProps = {
   id: string;
@@ -19,6 +16,7 @@ type UserProps = {
   course: string;
   avatar: string;
   email: string;
+  xp: number;
   owner?: boolean;
 };
 
@@ -26,9 +24,11 @@ type Props = RectButtonProps & {
   data: UserProps;
 };
 export function User({ data, ...rest }: Props) {
-  // const [category] = categories.filter((item) => item.id === data.category);
   const owner = true;
   const { primary, on, secondary50, secondary70 } = theme.colors;
+
+  const medalStep1 = data.xp < 600 ? bronzeMedal : plateMedal;
+  const medal = data.xp > 1600 ? goldMedal : medalStep1;
 
   return (
     <RectButton {...rest}>
@@ -58,7 +58,7 @@ export function User({ data, ...rest }: Props) {
             <View style={styles.playersInfo}>
               {/* <PlayerSvg fill={owner ? primary : on} /> */}
               <Image
-                source={goldMedal}
+                source={medal}
                 style={{ resizeMode: "contain", width: 18, height: 18 }}
               />
 

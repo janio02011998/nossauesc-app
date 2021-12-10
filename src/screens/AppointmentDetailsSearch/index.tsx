@@ -19,6 +19,7 @@ import { connectMembersAcademic } from "services/connectMembersAcademic";
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
 import { handleActivityEvent } from "services/handleActivityEvent";
+import { handleXp } from "services/handleXp";
 
 type Props = {
   route: {
@@ -50,11 +51,13 @@ export function AppointmentDetailsSearch({ route }: any) {
       );
       connectMembersAcademic("academic_research", item.uid, removeMember);
       ToastAndroid.show("Que pena :(", ToastAndroid.SHORT);
+      handleXp(user.uid, user.xp - 50);
     } else {
       const newArray = item.members;
       newArray.push(userMember);
       connectMembersAcademic("academic_research", item.uid, newArray);
       ToastAndroid.show("Seja bem-vindo!", ToastAndroid.SHORT);
+      handleXp(user.uid, user.xp + 50);
     }
   };
 
@@ -135,12 +138,14 @@ export function AppointmentDetailsSearch({ route }: any) {
             <ScrollView style={styles.resume}>
               <Text style={styles.subTitle}>{item.description}</Text>
             </ScrollView>
-            {user.uid !== 'access-basic' && (
+            {user.uid !== "access-basic" && (
               <View>
                 {user.uid !== item.providerId ? (
                   <View style={styles.footer}>
                     <ButtonIcon
-                      title={!addOrRemove ? "Candidatar-se" : "Remover candidatura"}
+                      title={
+                        !addOrRemove ? "Candidatar-se" : "Remover candidatura"
+                      }
                       onPress={handleEnterMember}
                     />
                   </View>
@@ -159,7 +164,7 @@ export function AppointmentDetailsSearch({ route }: any) {
           <FlatList
             data={item.members}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <C.User data={item} onPress={() => { }} />}
+            renderItem={({ item }) => <C.User data={item} onPress={() => {}} />}
             style={styles.matches}
             showsHorizontalScrollIndicator={false}
             ItemSeparatorComponent={() => <C.ListDivider />}

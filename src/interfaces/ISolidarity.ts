@@ -3,7 +3,7 @@ export interface ISolidarity {
   description: string;
   isActive: string;
   providerId: string;
-  conection: UserProps;
+  connection: UserProps;
   uid: string;
 }
 
@@ -13,4 +13,5 @@ export type UserProps = {
   course: string;
   avatar: string;
   email: string;
+  xp: number;
 };

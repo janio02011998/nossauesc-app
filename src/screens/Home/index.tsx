@@ -27,6 +27,7 @@ import { IAcademicResearch } from "interfaces/IAcadResearch";
 import { theme } from "global/styles/theme";
 import { styles } from "./styles";
 import { FAQ } from "./Faq";
+import { handleXp } from "services/handleXp";
 
 export function Home() {
   const [category, setCategory] = useState("1");
@@ -37,6 +38,7 @@ export function Home() {
 
   const { academicResearch, isLoadingAR } = useAcademicResearch();
   const { user } = useAuth();
+  console.log(user);
   const { activityStudent, isLoadingAS } = useActitivityStudent();
   const { solidarity, isLoading } = useSolidarity();
 
@@ -55,8 +57,10 @@ export function Home() {
       course: user.course,
       avatar: user.photoURL,
       email: user.email,
+      xp: user.xp,
     };
     connectSolidarity(doc, userProps);
+    handleXp(user.uid, user.xp + 50);
   };
 
   const toggleSwitch = (status: boolean) => {
@@ -218,13 +222,14 @@ export function Home() {
           data={isOwnerSearchSupportive ? ownerSupportive : allSupportive}
           keyExtractor={(item) => item.uid}
           renderItem={({ item }) => {
-            const total = item.conection !== undefined ? 1 : 0;
+            const total = item.connection.name ? 1 : 0;
             const data = {
               title: item.description,
               subtitle: `${total} conexões`,
               icon: item.banner,
               connections: total,
               isSolidarity: true,
+              xp: item.connection.xp,
             };
             return (
               <Popover
@@ -249,7 +254,7 @@ export function Home() {
                   >
                     <View>
                       {total ? (
-                        <C.User data={item.conection} onPress={() => {}} />
+                        <C.User data={item.connection} onPress={() => {}} />
                       ) : (
                         <Text style={[styles.title, { marginBottom: 30 }]}>
                           Sem conexões
@@ -273,7 +278,7 @@ export function Home() {
                     }}
                   >
                     {!total ? (
-                      <View>
+                      <>
                         {user.uid !== "basic-access" && (
                           <TouchableOpacity
                             onPress={() => handleConectSolidarity(item.uid)}
@@ -281,7 +286,7 @@ export function Home() {
                             <C.ButtonIcon title="Conectar" />
                           </TouchableOpacity>
                         )}
-                      </View>
+                      </>
                     ) : (
                       <Text style={styles.title}>
                         Este objeto já encontrou um novo dono ;D

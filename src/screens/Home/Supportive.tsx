@@ -58,7 +58,7 @@ export function Supportive(solidarity: ISolidarity[], user: User) {
         data={isOwnerSearchSupportive ? ownerSupportive : allSupportive}
         keyExtractor={(item) => item.uid}
         renderItem={({ item }) => {
-          const total = item.conection !== undefined ? 1 : 0;
+          const total = item.connection !== undefined ? 1 : 0;
           const data = {
             title: item.description,
             subtitle: `${total} conexões`,
@@ -87,7 +87,7 @@ export function Supportive(solidarity: ISolidarity[], user: User) {
                 >
                   <View>
                     {total ? (
-                      <C.User data={item.conection} onPress={() => {}} />
+                      <C.User data={item.connection} onPress={() => {}} />
                     ) : (
                       <Text style={[styles.title, { marginBottom: 30 }]}>
                         Sem conexões

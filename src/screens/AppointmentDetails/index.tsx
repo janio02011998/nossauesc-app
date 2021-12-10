@@ -25,6 +25,7 @@ import * as C from "components";
 
 import { styles } from "./styles";
 import { theme } from "global/styles/theme";
+import { handleXp } from "services/handleXp";
 
 export function AppointmentDetails({ route }: any) {
   const { data }: { data: IActivityStudent } = route.params;
@@ -93,12 +94,14 @@ export function AppointmentDetails({ route }: any) {
       );
       connectMembers("actitivity_student", data.uid, removeMember);
       ToastAndroid.show("Que pena :(", ToastAndroid.SHORT);
+      handleXp(user.uid, user.xp - 50);
       goBack();
     } else {
       const newArray = data.members;
       newArray.push(userMember);
       connectMembers("actitivity_student", data.uid, newArray);
       ToastAndroid.show("Seja bem-vindo!", ToastAndroid.SHORT);
+      handleXp(user.uid, user.xp + 50);
       goBack();
     }
   };
@@ -109,9 +112,7 @@ export function AppointmentDetails({ route }: any) {
   };
 
   if (!data) {
-    return (
-      <C.Load />
-    );
+    return <C.Load />;
   }
 
   useEffect(() => {

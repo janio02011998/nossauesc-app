@@ -4,7 +4,7 @@ import { UserProps } from "interfaces/ISolidarity";
 export const connectSolidarity = async (doc: string, user: UserProps) => {
   try {
     Firestore.collection("solidarity").doc(doc).update({
-      conection: user,
+      connection: user,
     });
 
     return "Registrado!";

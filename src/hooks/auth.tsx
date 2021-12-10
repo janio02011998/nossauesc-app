@@ -10,6 +10,7 @@ import AsyncStorages from "@react-native-async-storage/async-storage";
 
 import { Auth } from "configs/firebase";
 import firebase from "firebase/app";
+import { ToastAndroid } from "react-native";
 
 export type User = {
   displayName: string;
@@ -45,19 +46,26 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId:
+    androidClientId:
+      "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
+    iosClientId:
+      "414663250095-oj5ebq4sskgso3jemk03oa2b6bjfsr20.apps.googleusercontent.com",
+    webClientId:
       "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
+    expoClientId:
+      "414663250095-hdpteb9dqrpang7irlgerg04b3nn9udl.apps.googleusercontent.com",
   });
 
   async function signIn() {
     try {
       setLoading(true);
-      const response = await promptAsync();
+      const response = await promptAsync({ showInRecents: true });
       if (response.type === "dismiss") {
         setLoading(false);
+        ToastAndroid.show(String(response.type), ToastAndroid.SHORT);
       }
     } catch {
-      throw new Error("Não foi possível autenticar!");
+      ToastAndroid.show("Não foi possível autenticar!", ToastAndroid.SHORT);
     }
   }
 
@@ -81,8 +89,9 @@ function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
-    setUser({} as User);
+    await Auth.signOut();
     await AsyncStorages.removeItem("@nossauesc:user");
+    setUser({} as User);
   };
 
   useEffect(() => {
@@ -122,7 +131,8 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         setLoading(false);
       }
-    } catch (err) {
+    } catch (err: any) {
+      ToastAndroid.show(err.message, ToastAndroid.SHORT);
       setLoading(false);
     } finally {
       setLoading(false);

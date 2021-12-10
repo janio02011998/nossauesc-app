@@ -7,11 +7,13 @@ import {
   Rajdhani_700Bold,
 } from "@expo-google-fonts/rajdhani";
 import AppLoading from "expo-app-loading";
+import * as WebBrowser from "expo-web-browser";
 
 import { Background } from "./src/components/Background";
 import { Routes } from "./src/routes";
 import { AuthProvider } from "./src/hooks/auth";
 
+WebBrowser.maybeCompleteAuthSession();
 LogBox.ignoreAllLogs(true);
 
 export default function App() {
