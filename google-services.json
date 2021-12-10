@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "414663250095",
+    "project_id": "nossa-uesc",
+    "storage_bucket": "nossa-uesc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414663250095:android:c156d33a4155334304445a",
+        "android_client_info": {
+          "package_name": "com.nossauesc.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nossauesc.app",
+            "certificate_hash": "fe6512b4855ec143095e5bfd35b15cf6ab16ea50"
+          }
+        },
+        {
+          "client_id": "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr4880PEEr4hoMQnjYn8jzGqtQVvG_81A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "414663250095-oj5ebq4sskgso3jemk03oa2b6bjfsr20.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jjcjunior.nossauesc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
