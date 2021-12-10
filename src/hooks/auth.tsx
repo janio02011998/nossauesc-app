@@ -5,8 +5,8 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import * as Google from "expo-auth-session/providers/google";
 import AsyncStorages from "@react-native-async-storage/async-storage";
+import * as Google from "expo-google-app-auth";
 
 import { Auth } from "configs/firebase";
 import firebase from "firebase/app";
@@ -45,62 +45,25 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    androidClientId:
-      "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
-    iosClientId:
-      "414663250095-oj5ebq4sskgso3jemk03oa2b6bjfsr20.apps.googleusercontent.com",
-    webClientId:
-      "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
-    expoClientId:
-      "414663250095-hdpteb9dqrpang7irlgerg04b3nn9udl.apps.googleusercontent.com",
-  });
-
+  // PROD => com.nossauesc.app
+  // DEV => host.exp.exponent
   async function signIn() {
-    try {
-      setLoading(true);
-      const response = await promptAsync({ showInRecents: true });
-      if (response.type === "dismiss") {
-        setLoading(false);
-        ToastAndroid.show(String(response.type), ToastAndroid.SHORT);
-      }
-    } catch {
-      ToastAndroid.show("Não foi possível autenticar!", ToastAndroid.SHORT);
-    }
-  }
+    const config = {
+      webClientId:
+        "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
 
-  const setAllInfosUser = (user: User) => {
-    setUser(user);
-  };
+      androidClientId:
+        "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
+      scopes: ["profile", "email"],
+    };
 
-  const loadUserStorageData = async () => {
-    try {
-      setLoading(true);
-      const storage = await AsyncStorages.getItem("@nossauesc:user");
-      if (storage) {
-        const useLogged = JSON.parse(storage);
-        setUser(useLogged.user);
-      }
-    } catch {
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    await Auth.signOut();
-    await AsyncStorages.removeItem("@nossauesc:user");
-    setUser({} as User);
-  };
-
-  useEffect(() => {
-    try {
-      if (response?.type === "success") {
-        const { id_token } = response.params;
+    Google.logInAsync(config)
+      .then((result: any) => {
+        setLoading(true);
+        const { idToken } = result;
 
         const provider: any = new firebase.auth.GoogleAuthProvider();
-        const credential = provider.credential(id_token);
+        const credential = provider.credential(idToken);
         Auth.signInWithCredential(credential);
 
         Auth.onAuthStateChanged((userResult: any) => {
@@ -128,16 +91,39 @@ function AuthProvider({ children }: AuthProviderProps) {
             });
           }
         });
-
         setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        ToastAndroid.show("Não foi possível autenticar!", ToastAndroid.SHORT);
+      });
+  }
+
+  const setAllInfosUser = (user: User) => {
+    setUser(user);
+  };
+
+  const loadUserStorageData = async () => {
+    try {
+      setLoading(true);
+      const storage = await AsyncStorages.getItem("@nossauesc:user");
+      if (storage) {
+        const useLogged = JSON.parse(storage);
+        setUser(useLogged.user);
       }
-    } catch (err: any) {
-      ToastAndroid.show(err.message, ToastAndroid.SHORT);
+    } catch {
       setLoading(false);
     } finally {
       setLoading(false);
     }
-  }, [response]);
+  };
+
+  const logout = async () => {
+    await Auth.signOut();
+    await AsyncStorages.removeItem("@nossauesc:user");
+    setUser({} as User);
+  };
 
   useEffect(() => {
     loadUserStorageData();

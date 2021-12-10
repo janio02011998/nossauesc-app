@@ -1,8 +1,6 @@
 import * as React from "react";
 import { RectButton } from "react-native-gesture-handler";
 import { Text, View, Image, ActivityIndicator } from "react-native";
-import * as GoogleSignIn from "expo-google-sign-in";
-import { ToastAndroid } from "react-native";
 
 import * as C from "components";
 
@@ -15,51 +13,25 @@ import { styles } from "./style";
 import { theme } from "global/styles/theme";
 
 export function SignIn() {
-  // const { signIn, loading, setAllInfosUser } = useAuth();
+  const { signIn, loading, setAllInfosUser } = useAuth();
 
-  // const signInWithouLogin = () => {
-  //   setAllInfosUser({
-  //     displayName: "Usuário",
-  //     email: "usernossauesc@gmail.com",
-  //     phoneNumber: "access-basic",
-  //     photoURL:
-  //       "https://lh3.googleusercontent.com/proxy/https://firebasestorage.googleapis.com/v0/b/nossa-uesc.appspot.com/o/icons%2FBras%C3%A3o_da_UESC.png?alt=media&token=d1277b94-6587-4dc6-992c-e2724ba1a976",
-  //     providerId: "access-basic",
-  //     uid: "access-basic",
-  //     course: "access-basic",
-  //     role: "access-basic",
-  //     registration: "access-basic",
-  //     departament: "access-basic",
-  //     searchArea: "access-basic",
-  //     xp: 0,
-  //   });
-  // };
-
-  // if (loading) {
-  //   return <C.Load />;
-  // }
-
-  const initAsync = async () => {
-    await GoogleSignIn.initAsync({
-      // You may ommit the clientId when the firebase `googleServicesFile` is configured
-      clientId:
-        "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
+  const signInWithouLogin = () => {
+    setAllInfosUser({
+      displayName: "Usuário",
+      email: "usernossauesc@gmail.com",
+      phoneNumber: "access-basic",
+      photoURL:
+        "https://lh3.googleusercontent.com/proxy/https://firebasestorage.googleapis.com/v0/b/nossa-uesc.appspot.com/o/icons%2FBras%C3%A3o_da_UESC.png?alt=media&token=d1277b94-6587-4dc6-992c-e2724ba1a976",
+      providerId: "access-basic",
+      uid: "access-basic",
+      course: "access-basic",
+      role: "access-basic",
+      registration: "access-basic",
+      departament: "access-basic",
+      searchArea: "access-basic",
+      xp: 0,
     });
   };
-
-  React.useEffect(() => {
-    initAsync();
-  }, []);
-
-  async function signInAsync() {
-    try {
-      await GoogleSignIn.askForPlayServicesAsync();
-      const { type, user } = await GoogleSignIn.signInAsync();
-      ToastAndroid.show(JSON.stringify(user).toString(), ToastAndroid.SHORT);
-    } catch ({ message }) {
-      alert("login: Error:" + message);
-    }
-  }
 
   return (
     <C.Background>
@@ -80,9 +52,9 @@ export function SignIn() {
             iniciação ciêntifica, fique por dentro!
           </Text>
 
-          {true ? (
+          {!loading ? (
             <View style={styles.wrapper}>
-              {/* <RectButton
+              <RectButton
                 style={styles.buttonWithoutLogin}
                 onPress={signInWithouLogin}
               >
@@ -93,8 +65,8 @@ export function SignIn() {
                 >
                   <Text style={styles.buttonTextWithLogin}>Entrar</Text>
                 </View>
-              </RectButton> */}
-              <RectButton style={styles.buttonContainer} onPress={signInAsync}>
+              </RectButton>
+              <RectButton style={styles.buttonContainer} onPress={signIn}>
                 <Image source={GoogleIcon} style={styles.googleIcon} />
                 <View
                   style={styles.buttonTextContainer}
