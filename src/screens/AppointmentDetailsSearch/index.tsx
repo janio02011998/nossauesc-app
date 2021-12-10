@@ -133,7 +133,7 @@ export function AppointmentDetailsSearch({ route }: any) {
               </Text>
             </View>
             <View style={styles.containerDivider}>
-              <Text style={styles.title}>Descriçaõ do projeto</Text>
+              <Text style={styles.title}>Descrição do projeto</Text>
             </View>
             <ScrollView style={styles.resume}>
               <Text style={styles.subTitle}>{item.description}</Text>

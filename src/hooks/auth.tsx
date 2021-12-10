@@ -51,8 +51,9 @@ function AuthProvider({ children }: AuthProviderProps) {
     const config = {
       webClientId:
         "414663250095-gbpkkhc0m1rluk3egbscshdmtr83tno9.apps.googleusercontent.com",
-
       androidClientId:
+        "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
+      androidStandaloneAppClientId:
         "414663250095-g9kq65gb9mohq0rgq7mfmsfnp6lcgia0.apps.googleusercontent.com",
       scopes: ["profile", "email"],
     };
