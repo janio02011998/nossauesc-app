@@ -236,7 +236,10 @@ export function Home() {
                   backgroundColor: theme.colors.overlay,
                   borderRadius: 10,
                   borderBottomColor: "transparent",
-                  padding: 8,
+                  paddingHorizontal: 8,
+                  paddingVertical: 8,
+                  minWidth: 325,
+                  height: 150,
                 }}
                 from={
                   <TouchableOpacity>
@@ -251,7 +254,7 @@ export function Home() {
                       justifyContent: "center",
                     }}
                   >
-                    <View>
+                    <View style={{ flexDirection: "column" }}>
                       {total ? (
                         <C.User data={item.connection} onPress={() => {}} />
                       ) : (
@@ -260,6 +263,7 @@ export function Home() {
                         </Text>
                       )}
                       <TouchableOpacity
+                        style={{ marginTop: 45 }}
                         onPress={() => handleInactiveTopic(item.uid)}
                       >
                         <C.ButtonIcon title="Fechar tópico" />
