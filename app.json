@@ -2,7 +2,7 @@
   "expo": {
     "name": "Nossa UESC",
     "slug": "nossauesc",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "nossauesc",
@@ -19,7 +19,6 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 2,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
