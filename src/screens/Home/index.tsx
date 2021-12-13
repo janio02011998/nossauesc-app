@@ -38,7 +38,6 @@ export function Home() {
 
   const { academicResearch, isLoadingAR } = useAcademicResearch();
   const { user } = useAuth();
-  console.log(user);
   const { activityStudent, isLoadingAS } = useActitivityStudent();
   const { solidarity, isLoading } = useSolidarity();
 
